@@ -19,8 +19,6 @@ Working Sheet: https://docs.google.com/spreadsheets/d/1aLoeuykOMAq-sWQ7JCzsnpEku
 - `submission/Allo_Operations_Template.xlsx`: importable workbook structure, sample task master and instructions. XLSX does not embed or run Apps Script.
 - `submission/SOLUTION_REPORT.docx`: project explanation and evidence boundaries.
 - `submission/DEPLOYMENT.md`: Google account deployment and acceptance steps.
-- `submission/INTERVIEW_WALKTHROUGH.md`: explain the system without unsupported claims.
-- `submission/SUBMISSION_EMAIL.md`: unsent company email draft, with explicit placeholders.
 - `CHECKPOINTS.md` and `REQUIREMENTS.md`: delivery status and requirement mapping.
 - `evidence/`: generated test output and deterministic scenario results.
 
