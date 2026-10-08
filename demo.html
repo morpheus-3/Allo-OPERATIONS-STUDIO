@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Allo | Operations Manager</title>
+<style>
+:root{--ink:#1c392e;--muted:#63766d;--green:#245c45;--border:#dce5df;--bg:#f5f7f4}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 "Segoe UI",Arial,sans-serif}button,input,select{font:inherit}button,a,input,select{outline-offset:4px}button{cursor:pointer;border:1px solid #cbd8cf;border-radius:8px;background:white;padding:10px 15px;color:var(--green);font-weight:600}button:hover{background:#edf4ee}button.primary{background:var(--green);color:white;border-color:var(--green)}button:disabled{cursor:default;opacity:.6}a{color:var(--green)}[hidden]{display:none!important}aside{position:fixed;width:230px;inset:0 auto 0 0;background:#173e32;color:#d7e4db;padding:32px 22px;display:flex;flex-direction:column}aside h1{font-size:38px;letter-spacing:-2px;line-height:1;margin:5px 10px 13px;color:white}aside small{letter-spacing:3px;font-size:9px;margin-left:10px}nav{margin-top:48px}nav button{display:block;width:100%;text-align:left;background:transparent;color:#d7e4db;border:0;margin:6px 0;padding:13px 14px;font-weight:500}nav button.active,nav button:hover{background:#315b49;color:white}aside footer{margin-top:auto;font-size:11px;line-height:1.9;padding:18px 10px 0;color:#a9c3b3}.sidebar-state{display:inline-flex;align-items:center;gap:7px;margin-bottom:8px;color:#dcece1}.sidebar-state:before{content:"";width:7px;height:7px;background:#a8d5ac;border-radius:50%}main{margin-left:230px;padding:32px 38px;max-width:1880px}.eyebrow{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted)}h2{font-size:30px;line-height:1.2;letter-spacing:-.8px;margin:8px 0 10px}h3{font-size:17px;margin:0}p{color:var(--muted);margin:8px 0}.top,.section-title,.toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px}.top{margin-bottom:26px}.clock{background:white;border:1px solid var(--border);border-radius:10px;padding:12px 18px;min-width:190px}.clock strong{display:block;margin-top:3px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:24px}.stat{background:white;border:1px solid var(--border);border-radius:12px;padding:19px 22px}.stat span{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;font-size:32px;line-height:1.3;margin-top:10px}.toolbar{flex-wrap:wrap;background:#eaf0eb;padding:14px 16px;border:1px solid var(--border);border-radius:10px;margin:0 0 20px}.toolbar-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.toolbar-label{font-size:11px;color:var(--muted);margin-right:5px}.toolbar button{font-size:12px;padding:8px 11px}select{padding:9px 12px;border:1px solid #cbd8cf;border-radius:8px;background:white;color:var(--ink);max-width:100%}.panel{background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:20px 0}.section-title{padding:18px 22px;border-bottom:1px solid #e5ebe6}.table-wrap{overflow:auto}table{width:100%;min-width:1100px;border-collapse:collapse;text-align:left;table-layout:fixed}th{font-size:10px;letter-spacing:.7px;color:var(--muted);background:#f8faf7;padding:14px 16px}th:nth-child(1){width:20%}th:nth-child(2){width:11%}th:nth-child(3){width:13%}th:nth-child(4){width:11%}th:nth-child(5){width:25%}th:nth-child(6){width:20%}td{padding:18px 16px;border-top:1px solid #edf1ec;font-size:12px;vertical-align:top;overflow-wrap:anywhere}td small{display:block;color:var(--muted);margin-top:5px;font-size:11px}.badge{display:inline-flex;align-items:center;border-radius:20px;padding:5px 10px;font-size:11px;background:#edf1ed;white-space:nowrap}.Overdue{background:#fce5de;color:#a34329}.Completed{background:#e0f2e6;color:#256841}.Due{background:#fff2d7;color:#886016}input,textarea{padding:10px 11px;border:1px solid #cbd8cf;border-radius:7px;width:100%;min-width:0;color:var(--ink);background:white}input::placeholder{color:#708078}td input{display:block;margin-bottom:8px}td button{font-size:12px;padding:8px 12px}.proof-help{display:block;font-size:11px;color:var(--muted);margin-bottom:7px}.notice{font-size:12px;color:var(--muted);padding:10px 0}.events{padding:0 22px}.event{padding:16px 0;border-bottom:1px solid #edf1ec;font-size:13px}.event:last-child{border:0}.event time{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}.empty{padding:28px 22px;color:var(--muted);font-size:13px}.empty strong{display:block;color:var(--ink);margin-bottom:5px}#message:empty{display:none}#message{background:#edf4ed;border:1px solid #d3e2d5;border-radius:8px;padding:12px 16px;color:#315b3c;font-size:13px;margin-bottom:16px}.team-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;padding:22px}.person-card{border:1px solid var(--border);border-radius:10px;padding:18px}.person-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}.avatar{display:grid;place-items:center;width:36px;height:36px;background:#edf3ec;border-radius:50%;font-weight:700}.person-card p{font-size:12px}.person-card button{margin-top:12px;width:100%;font-size:12px}.review-list{padding:0 22px}.review-card{padding:22px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:minmax(180px,1fr) minmax(250px,1.2fr);gap:24px}.review-card:last-child{border:0}.review-card p{font-size:12px}.review-card input{margin:8px 0}.context{padding:18px 22px;background:#fafcf8;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}.help{margin-top:26px;border-top:1px solid var(--border);padding:16px 0;color:var(--muted);font-size:12px}.help summary{cursor:pointer;font-weight:600}.help p{max-width:1000px}.empty-actions{margin-top:16px;display:flex;gap:8px}.subtitle{max-width:720px}.log-tools{display:flex;gap:8px;align-items:center}.log-tools select{font-size:12px}.nav-count{float:right;color:#b8d2bd}.flow-strip{display:flex;gap:10px;flex-wrap:wrap;padding:16px 22px;background:#fafcf8;color:var(--muted);font-size:12px}.flow-strip span{padding-right:10px;border-right:1px solid var(--border)}@media(min-width:1700px){main{padding:36px 48px}}@media(max-width:1200px){.team-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.toolbar{align-items:flex-start}}@media(max-width:900px){aside{position:static;width:100%;padding:18px 20px;display:block}aside h1{font-size:28px;margin:0 0 8px}aside small,aside footer{display:none}nav{margin:12px 0 0;display:flex;gap:5px;overflow:auto}nav button{white-space:nowrap;width:auto;font-size:12px;padding:10px}main{margin:0;padding:22px}.top{align-items:flex-start}.clock{min-width:160px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.review-card{grid-template-columns:1fr;gap:10px}}@media(max-width:520px){.top{flex-direction:column}.clock{width:100%}h2{font-size:26px}.team-grid{grid-template-columns:1fr}.stats{gap:10px}.stat{padding:16px}.toolbar-actions{gap:6px}.toolbar-label{width:100%}.section-title{align-items:flex-start;flex-direction:column}}
+</style></head><body>
+<aside><h1>allo<span style="color:#95c7a5">.</span></h1><small>OPERATIONS STUDIO</small><nav aria-label="Project views"><button id="nav-overview" onclick="setTab('overview')">Operations overview</button><button id="nav-workboard" onclick="setTab('workboard')">Recurring workboard</button><button id="nav-manager" onclick="setTab('manager')">Manager review</button><button id="nav-alerts" onclick="setTab('alerts')">Escalation log</button></nav><footer><div class="sidebar-state">Interactive prototype</div><br>ALLO INNOWARE<br>Google Sheets companion demo</footer></aside>
+<main><header class="top"><div><div class="eyebrow">Recurring operations</div><h2 id="page-title">Operations overview</h2><p id="page-description" class="subtitle">Track your team, spot delays, and keep the next cycle moving.</p></div><div class="clock"><div class="eyebrow">Demo clock &middot; IST</div><strong id="clock"></strong></div></header>
+<div class="stats" id="stats"></div>
+<div class="toolbar"><select id="person" aria-label="Employee filter" onchange="render()"><option value="">All employees</option><option>Employee A</option><option>Employee B</option><option>Employee C</option><option>Employee D</option></select><div class="toolbar-actions"><span class="toolbar-label">Demonstration controls</span><button onclick="advance(1)">+1 hour</button><button onclick="advance(4)">+4 hours</button><button onclick="advance(24)">+1 day</button><button class="primary" onclick="run();render();message('Automation checked all cycles. New alerts appear in the escalation log.')">Run automation</button><button onclick="exportDemo()">Export evidence</button><button onclick="reset()">Reset</button></div></div>
+<div id="message" role="status" aria-live="polite"></div>
+<section class="panel" id="overview-panel"><div class="section-title"><h3>Team at a glance</h3><span class="eyebrow">Four owners &middot; one operating rhythm</span></div><div id="team-cards" class="team-grid"></div><div class="flow-strip"><span>Daily: next working day</span><span>Portal tasks: every 7 / 15 / 30 days</span><span>Completion prepares the next cycle automatically</span></div></section>
+<section class="panel" id="work-panel"><div class="section-title"><div><h3 id="table-title">Recurring workboard</h3><p style="font-size:12px">Add proof and complete your task in the same row.</p></div><span class="eyebrow" id="cycle-count"></span></div><div class="table-wrap"><table><thead><tr><th>TASK / CYCLE</th><th>OWNER</th><th>DUE &middot; IST</th><th>STATUS</th><th>PROOF / COMPLETION</th><th>MANAGER REVIEW</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+<section class="panel" id="manager-panel"><div class="section-title"><div><h3>Review queue</h3><p style="font-size:12px">Acknowledge the delay and record the next action. Completion remains with the employee.</p></div><span class="eyebrow" id="review-count"></span></div><div id="review-cards" class="review-list"></div><div class="context">Review within 4 elapsed hours of the manager alert. Unresolved work escalates after 24 hours, even when acknowledged.</div></section>
+<section class="panel" id="log-panel"><div class="section-title"><h3 id="log-title">Recent activity</h3><div class="log-tools"><select id="event-filter" aria-label="Activity filter" onchange="render()"><option value="">All activity</option><option value="MANAGER">Manager alerts</option><option value="LEADERSHIP">Leadership escalations</option><option value="COMPLETED">Completions</option><option value="ACKNOWLEDGED">Acknowledgements</option></select></div></div><div id="events" class="events"></div></section>
+<details class="help"><summary>About this prototype &amp; submission files</summary><p>This browser demo simulates users, time and email. The Google Sheets implementation captures editor identity and sends configured emails after authorization. Daily completion is employee attestation.</p><p>Local tests and the eight assignment scenarios pass. Live Google Sheet authorization and actual email receipts remain pending. <a href="submission/START_HERE.md" target="_blank" rel="noopener">Open submission guide</a>.</p></details>
+</main><script>/* Pure rules shared by Apps Script and the automated tests. All dates use the
+   configured project timezone (Asia/Kolkata). Intervals are calendar days. */
+function dayKey(d) {
+  return Utilities.formatDate(new Date(d), 'Asia/Kolkata', 'yyyy-MM-dd');
+}
+function dateAt(day, hour) { return new Date(day + 'T' + String(hour).padStart(2, '0') + ':00:00+05:30'); }
+function addDays(day, days) {
+  return dayKey(new Date(dateAt(day, 12).getTime() + days * 86400000));
+}
+function workingDay(day) { return ![0, 6].includes(new Date(dateAt(day, 12).getTime() + 19800000).getUTCDay()); }
+function firstDay(day, daily) {
+  while (daily && !workingDay(day)) day = addDays(day, 1);
+  return day;
+}
+function nextDue(task, completedAt) {
+  // Completion-anchored intervals; daily work resumes on the next working day.
+  return dateAt(firstDay(addDays(dayKey(completedAt), Number(task.IntervalDays)), task.ProofType === 'DAILY'), Number(task.DueHour));
+}
+function cycleFor(task, due) {
+  return { CycleID: task.TaskID + ':' + dayKey(due), TaskID: task.TaskID,
+    Task: task.Task, Employee: task.Employee, EmployeeEmail: String(task.EmployeeEmail).trim().toLowerCase(),
+    DueAt: due, ProofType: task.ProofType, Proof: '', Complete: false,
+    CompletedBy: '', CompletedAt: '', Status: 'Upcoming',
+    ManagerAlertAt: '', Acknowledge: false, AcknowledgedBy: '', AcknowledgedAt: '',
+    ManagerNote: '', LeadershipAlertAt: '', Error: '' };
+}
+function statusFor(c, now) {
+  if (c.CompletedAt) return 'Completed';
+  if (new Date(c.DueAt) <= now) return 'Overdue';
+  return dayKey(c.DueAt) <= dayKey(now) ? 'Due today' : 'Upcoming';
+}
+function alertFor(c, now, ackHours, resolveHours) {
+  if (!c.ManagerAlertAt) return !c.CompletedAt && now >= new Date(c.DueAt) ? 'MANAGER' : '';
+  if (c.LeadershipAlertAt) return '';
+  const hours = (now - new Date(c.ManagerAlertAt)) / 3600000;
+  if ((!c.AcknowledgedAt && hours >= ackHours) || (!c.CompletedAt && hours >= resolveHours)) return 'LEADERSHIP';
+  return '';
+}
+function completionError(c) {
+  if (c.ProofType === 'TICKET' && !String(c.Proof).trim()) return 'Enter a Ticket ID before checking Complete.';
+  if (String(c.Proof).length > 2000) return 'Keep completion proof under 2,000 characters.';
+  return '';
+}
+function validEmail(value) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim()); }
+function isSampleEmail(value) { return /@example\.(com|org|net)$/i.test(String(value || '').trim()); }
+function validateTask(task) {
+  if (!/^[A-Za-z0-9_-]{1,60}$/.test(String(task.TaskID))) throw new Error('TaskID must be a stable, unique ID using letters, numbers, _ or -: '+task.TaskID);
+  if (!String(task.Task || '').trim() || !String(task.Employee || '').trim() || !validEmail(task.EmployeeEmail)) throw new Error('Task name, employee and valid employee email required: '+task.TaskID);
+  if (![1,7,15,30].includes(Number(task.IntervalDays)) || !['DAILY','TICKET'].includes(task.ProofType)) throw new Error('Invalid recurrence or proof type: '+task.TaskID);
+  if (task.ProofType === 'DAILY' && Number(task.IntervalDays) !== 1) throw new Error('DAILY tasks require IntervalDays = 1: '+task.TaskID);
+  if (task.DueHour === '' || !Number.isInteger(Number(task.DueHour)) || Number(task.DueHour)<0 || Number(task.DueHour)>23) throw new Error('DueHour must be an integer 0–23: '+task.TaskID);
+  const day=task.StartDate instanceof Date ? dayKey(task.StartDate) : String(task.StartDate);
+  const parsed=dateAt(day,12);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !Number.isFinite(parsed.getTime()) || dayKey(parsed)!==day) throw new Error('StartDate must be a real YYYY-MM-DD date: '+task.TaskID);
+}
+function validateSettings(cfg) {
+  if (!['true','false'].includes(String(cfg.DryRun).toLowerCase())) throw new Error('DryRun must be TRUE or FALSE; invalid values never enable sending.');
+  if (!Number.isFinite(Number(cfg.AckHours)) || !Number.isFinite(Number(cfg.ResolveHours)) || !(Number(cfg.AckHours)>0) || !(Number(cfg.ResolveHours)>=Number(cfg.AckHours))) throw new Error('SLA must use finite positive hours; ResolveHours must be at least AckHours.');
+  if (!validEmail(cfg.ManagerEmail) || !validEmail(cfg.LeadershipEmail)) throw new Error('Valid manager and leadership email addresses required.');
+  if (String(cfg.DryRun).toLowerCase()==='false' && [cfg.ManagerEmail,cfg.LeadershipEmail].some(isSampleEmail)) throw new Error('Replace sample recipients before enabling live email.');
+}
+
+const Utilities={formatDate:d=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(d)};
+let tasks,cycles,events,now,activeTab='overview';
+const fmt=d=>new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(d));
+const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function persist(){try{localStorage.setItem('allo-demo-v1.1',JSON.stringify({tasks,cycles,events,now,activeTab}));}catch{}}
+function message(text){document.getElementById('message').textContent=text;}
+function reset(){
+  now=dateAt('2026-10-08',16);activeTab='overview';
+  tasks=['Daily Operations Update','Portal Task A','Portal Task B','Portal Task C'].map((Task,i)=>({TaskID:'TASK-'+(i+1),Task,Employee:'Employee '+String.fromCharCode(65+i),EmployeeEmail:'employee'+i+'@demo.test',IntervalDays:[1,7,15,30][i],ProofType:i?'TICKET':'DAILY',DueHour:17}));
+  cycles=tasks.map(t=>cycleFor(t,dateAt('2026-10-08',17)));events=[];
+  document.getElementById('person').value='';message('');render();
+}
+function setTab(tab){activeTab=tab;if(tab==='manager')document.getElementById('person').value='';render();}
+function showEmployee(employee){document.getElementById('person').value=employee;setTab('workboard');}
+function advance(h){now=new Date(+now+h*3600000);run();render();}
+function run(){cycles.forEach(c=>{const stage=alertFor(c,now,4,24);if(stage){c[stage==='MANAGER'?'ManagerAlertAt':'LeadershipAlertAt']=new Date(now);events.unshift({at:new Date(now),stage,cycle:c.CycleID,text:(stage==='MANAGER'?'Manager notified':'Leadership escalation')+' · '+c.Task+' · '+c.Employee});}});persist();}
+function draft(i,field,value){cycles[i][field]=value;persist();}
+function complete(i){
+  const c=cycles[i];c.Proof=String(c.Proof||'').trim();const err=completionError(c);
+  if(err){message(err);return;}
+  if(dayKey(c.DueAt)>dayKey(now)){message('This cycle is not due yet.');return;}
+  if(c.CompletedAt)return;
+  c.CompletedAt=new Date(now);c.CompletedBy=c.EmployeeEmail;c.Complete=true;
+  events.unshift({at:new Date(now),stage:'COMPLETED',cycle:c.CycleID,text:'Completed · '+c.Task+' · '+(c.Proof||'Daily update confirmed')});
+  const t=tasks.find(t=>t.TaskID===c.TaskID);cycles.push(cycleFor(t,nextDue(t,now)));
+  message('Cycle completed. Next due date calculated automatically.');render();
+}
+function acknowledge(i){
+  const c=cycles[i],note=String(c.ManagerNote||'').trim();
+  if(!c.ManagerAlertAt || c.AcknowledgedAt)return;
+  if(!note){message('Add a manager action note before acknowledging.');return;}
+  c.ManagerNote=note;c.AcknowledgedAt=new Date(now);c.AcknowledgedBy='manager@demo.test';
+  events.unshift({at:new Date(now),stage:'ACKNOWLEDGED',cycle:c.CycleID,text:'Manager acknowledged · '+c.Task+' · '+note});render();
+}
+function exportDemo(){const blob=new Blob([JSON.stringify({simulation:true,timezone:'Asia/Kolkata',tasks,cycles,events,now},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='allo-demo-evidence.json';a.click();URL.revokeObjectURL(a.href);}
+function render(){
+  persist();document.getElementById('clock').textContent=fmt(now);
+  const titles={overview:'Operations overview',workboard:'Recurring workboard',manager:'Manager review',alerts:'Escalation log'};
+  document.getElementById('page-title').textContent=titles[activeTab];
+  const descriptions={overview:'Track your team, spot delays, and keep the next cycle moving.',workboard:'See what is due, add proof, and close the current cycle from one place.',manager:'Review overdue work, record a recovery action, and follow unresolved items.',alerts:'Inspect every alert, acknowledgement and completion in one audit trail.'};
+  document.getElementById('page-description').textContent=descriptions[activeTab];
+  for(const t of Object.keys(titles))document.getElementById('nav-'+t).className=t===activeTab?'active':'';
+  document.getElementById('overview-panel').hidden=activeTab!=='overview';
+  document.getElementById('manager-panel').hidden=activeTab!=='manager';
+  document.getElementById('work-panel').hidden=activeTab!=='workboard';
+  document.getElementById('log-panel').hidden=activeTab==='workboard'||activeTab==='manager';
+  document.getElementById('log-title').textContent=activeTab==='alerts'?'Activity & escalation log':'Recent activity';
+  document.getElementById('table-title').textContent=activeTab==='manager'?'Pending work & outstanding reviews':'Team workboard';
+  const statuses=cycles.map(c=>statusFor(c,now));
+  document.getElementById('stats').innerHTML=[['Open cycles',cycles.filter(c=>!c.CompletedAt).length],['Overdue',statuses.filter(s=>s==='Overdue').length],['Completed cycles',cycles.filter(c=>c.CompletedAt).length],['Leadership alerts',cycles.filter(c=>c.LeadershipAlertAt).length]].map(([label,n])=>'<div class="stat"><span>'+label+'</span><strong>'+n+'</strong></div>').join('');
+  const person=document.getElementById('person').value;
+  document.getElementById('cycle-count').textContent=cycles.filter(c=>!person||c.Employee===person).length+' tracked cycles';
+  document.getElementById('team-cards').innerHTML=tasks.filter(t=>!person||t.Employee===person).map(t=>{
+    const own=cycles.filter(c=>c.TaskID===t.TaskID),open=own.find(c=>!c.CompletedAt),done=own.filter(c=>c.CompletedAt).length;
+    const status=open?statusFor(open,now):'Completed';
+    return '<article class="person-card"><div class="person-head"><span class="avatar">'+escape(t.Employee.slice(-1))+'</span><div><b>'+escape(t.Employee)+'</b><div class="eyebrow">'+(t.ProofType==='DAILY'?'Daily routine':t.IntervalDays+'-day cycle')+'</div></div></div><b>'+escape(t.Task)+'</b><p>'+(open?'Next due '+fmt(open.DueAt):'No open cycle')+'</p><span class="badge '+status.split(' ')[0]+'">'+status+'</span><p>'+done+' completed cycle'+(done===1?'':'s')+'</p><button onclick="showEmployee(\''+escape(t.Employee)+'\')">Open workboard</button></article>';
+  }).join('');
+  const reviews=cycles.map((c,i)=>({c,i})).filter(({c})=>c.ManagerAlertAt&&(!person||c.Employee===person));
+  const outstanding=reviews.filter(({c})=>!c.AcknowledgedAt);
+  document.getElementById('review-count').textContent=outstanding.length+' awaiting review';
+  document.getElementById('review-cards').innerHTML=reviews.length?reviews.map(({c,i})=>{
+    const status=statusFor(c,now);
+    return '<article class="review-card"><div><span class="badge '+status.split(' ')[0]+'">'+status+'</span><h3 style="margin-top:10px">'+escape(c.Task)+'</h3><p>'+escape(c.Employee)+' &middot; Due '+fmt(c.DueAt)+'</p><p>Alerted '+fmt(c.ManagerAlertAt)+'<br>Review deadline '+fmt(new Date(+new Date(c.ManagerAlertAt)+4*3600000))+'</p>'+(c.LeadershipAlertAt?'<span class="badge Overdue">Escalated to leadership</span>':'')+'</div><div>'+(c.AcknowledgedAt?'<span class="badge Completed">Acknowledged '+fmt(c.AcknowledgedAt)+'</span><p>'+escape(c.ManagerNote)+'</p>':'<label for="review'+i+'" class="proof-help">Recovery action / follow-up plan</label><input id="review'+i+'" maxlength="2000" value="'+escape(c.ManagerNote||'')+'" oninput="draft('+i+',\'ManagerNote\',this.value)" placeholder="e.g. Contacted owner; agreed completion by 18:00"><button class="primary" onclick="acknowledge('+i+')">Acknowledge review</button>')+'<p>'+(c.CompletedAt?'Employee completed at '+fmt(c.CompletedAt):'Employee completion is still outstanding.')+'</p></div></article>';
+  }).join(''):'<div class="empty"><strong>No manager reviews requested yet.</strong>Tasks are due at 17:00. When a task passes its deadline, automation creates a review request here.<div class="empty-actions"><button onclick="advance(1)">Advance the clock by 1 hour</button><button onclick="setTab(\'workboard\')">View employee tasks</button></div></div>';
+  const rows=cycles.map((c,i)=>{
+    if(person&&c.Employee!==person)return '';
+    const status=statusFor(c,now);
+    if(activeTab==='manager' && !['Overdue','Due today'].includes(status) && !(c.ManagerAlertAt&&!c.AcknowledgedAt))return '';
+    const input=c.CompletedAt?escape(c.Proof||'Daily update confirmed')+'<small>'+fmt(c.CompletedAt)+'</small>':status==='Upcoming'?'<small>Next cycle prepared</small>':'<label class="proof-help" for="proof'+i+'">'+(c.ProofType==='TICKET'?'Portal Ticket ID (required)':'Daily update confirmation; evidence optional')+'</label><input aria-label="Proof for '+escape(c.Task)+'" maxlength="2000" id="proof'+i+'" value="'+escape(c.Proof||'')+'" oninput="draft('+i+',\'Proof\',this.value)" placeholder="'+(c.ProofType==='TICKET'?'e.g. PORTAL-1042':'Evidence link or short note')+'"> <button onclick="complete('+i+')">'+(c.ProofType==='TICKET'?'Complete cycle':'Confirm daily update')+'</button>';
+    const review=c.AcknowledgedAt?'<span class="badge Completed">Acknowledged</span><small>'+escape(c.ManagerNote)+'</small>':c.ManagerAlertAt&&!person?'<input aria-label="Manager action for '+escape(c.Task)+'" id="note'+i+'" value="'+escape(c.ManagerNote||'')+'" oninput="draft('+i+',\'ManagerNote\',this.value)" placeholder="Manager action note"> <button onclick="acknowledge('+i+')">Acknowledge</button>':c.ManagerAlertAt?'<small>Review requested</small>':'<small>No review required</small>';
+    return '<tr><td><b>'+escape(c.Task)+'</b><small>'+escape(c.CycleID)+'</small></td><td>'+escape(c.Employee)+'</td><td>'+fmt(c.DueAt)+'</td><td><span class="badge '+status.split(' ')[0]+'">'+status+'</span></td><td>'+input+'</td><td>'+review+'</td></tr>';
+  }).join('');
+  document.getElementById('rows').innerHTML=rows||'<tr><td colspan="6">No pending work in this view.</td></tr>';
+  const eventFilter=document.getElementById('event-filter').value;
+  let visibleEvents=events.filter(e=>(!eventFilter||e.stage===eventFilter)&&(!person||cycles.some(c=>c.CycleID===e.cycle&&c.Employee===person)));
+  if(activeTab==='overview')visibleEvents=visibleEvents.slice(0,5);
+  document.getElementById('events').innerHTML=visibleEvents.length?visibleEvents.map(e=>'<div class="event"><time>'+fmt(e.at)+' IST</time><span class="badge '+(e.stage==='LEADERSHIP'?'Overdue':e.stage==='COMPLETED'?'Completed':'')+'">'+escape({MANAGER:'Manager alert',LEADERSHIP:'Leadership',COMPLETED:'Completion',ACKNOWLEDGED:'Review'}[e.stage]||'Activity')+'</span> &nbsp; '+escape(e.text)+'</div>').join(''):'<div class="empty"><strong>'+(events.length?'No activity matches this filter.':'No activity recorded yet.')+'</strong>'+(events.length?'Choose another activity type or employee.':'Complete a task from the workboard, or advance to 17:00 to see the alert flow.')+'</div>';
+}
+function initialize(){
+  try{const state=JSON.parse(localStorage.getItem('allo-demo-v1.1'));if(state&&Array.isArray(state.tasks)&&Array.isArray(state.cycles)&&Array.isArray(state.events)&&Number.isFinite(new Date(state.now).getTime())){tasks=state.tasks;cycles=state.cycles;events=state.events;now=new Date(state.now);activeTab=['overview','workboard','manager','alerts'].includes(state.activeTab)?state.activeTab:'overview';render();return;}}catch{}
+  reset();
+}
+initialize();
+</script></body></html>

@@ -1,0 +1,114 @@
+{
+  "execution": "Local Sheets API adapter; simulated accounts, clock and email",
+  "realGoogleServicesVerified": false,
+  "timezone": "Asia/Kolkata",
+  "results": [
+    {
+      "id": 1,
+      "title": "Automatic 7/15/30-day recurrence",
+      "status": "PASS",
+      "evidence": [
+        {
+          "intervalDays": 7,
+          "closedCycle": "TASK-2:2026-10-08",
+          "nextCycle": "TASK-2:2026-10-15",
+          "nextDue": "2026-10-15T11:30:00.000Z"
+        },
+        {
+          "intervalDays": 15,
+          "closedCycle": "TASK-3:2026-10-08",
+          "nextCycle": "TASK-3:2026-10-23",
+          "nextDue": "2026-10-23T11:30:00.000Z"
+        },
+        {
+          "intervalDays": 30,
+          "closedCycle": "TASK-4:2026-10-08",
+          "nextCycle": "TASK-4:2026-11-07",
+          "nextDue": "2026-11-07T11:30:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Single-point completion records proof, editor and timestamp",
+      "status": "PASS",
+      "evidence": {
+        "location": "Workboard H:I",
+        "proof": "PORTAL-DEMO-100",
+        "completedBy": "employeeb@allo.test",
+        "completedAt": "2026-10-08T10:30:00.000Z",
+        "status": "Completed"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Daily attestation without a ticket and weekend rollover",
+      "status": "PASS",
+      "evidence": {
+        "proofRequired": "Checkbox attestation; evidence optional",
+        "completedAt": "2026-10-09T10:30:00.000Z",
+        "nextDue": "2026-10-12T11:30:00.000Z"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Same-day manager alert at cutoff",
+      "status": "PASS",
+      "evidence": {
+        "due": "2026-10-08T11:30:00.000Z",
+        "alert": "2026-10-08T11:30:00.000Z",
+        "deliveryStatus": "DRY_RUN",
+        "actualEmailSent": false
+      }
+    },
+    {
+      "id": 5,
+      "title": "Manager action acknowledged separately from completion",
+      "status": "PASS",
+      "evidence": {
+        "managerNote": "Contacted employee and agreed recovery deadline",
+        "acknowledgedBy": "manager@allo.test",
+        "acknowledgedAt": "2026-10-08T11:30:00.000Z",
+        "completedBy": "employeeb@allo.test",
+        "completedAt": "2026-10-08T11:30:00.000Z"
+      }
+    },
+    {
+      "id": 6,
+      "title": "Leadership escalation when manager review is missing",
+      "status": "PASS",
+      "evidence": {
+        "managerAlert": "2026-10-08T11:30:00.000Z",
+        "leadershipAlert": "2026-10-08T15:30:00.000Z",
+        "reason": "No manager acknowledgement within four elapsed hours"
+      }
+    },
+    {
+      "id": 7,
+      "title": "SLA boundaries and resolved-work suppression",
+      "status": "PASS",
+      "evidence": {
+        "acknowledgedButUnresolvedEscalation": "2026-10-09T11:30:00.000Z",
+        "resolvedAndReviewedEscalation": "Suppressed",
+        "reviewHours": 4,
+        "resolutionHours": 24
+      }
+    },
+    {
+      "id": 8,
+      "title": "Repeated automation creates no duplicate alerts or cycles",
+      "status": "PASS",
+      "evidence": {
+        "before": {
+          "cycles": 4,
+          "alerts": 4
+        },
+        "after": {
+          "cycles": 4,
+          "alerts": 4
+        },
+        "repeatedRuns": 5
+      }
+    }
+  ]
+}

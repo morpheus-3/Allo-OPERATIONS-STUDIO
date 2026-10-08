@@ -1,0 +1,15 @@
+{
+  "release": "1.1.0",
+  "verifiedAtUTC": "2026-10-08T11:03:11.580Z",
+  "runtime": "v22.22.3",
+  "tests": 25,
+  "passed": 25,
+  "failed": 0,
+  "realGoogleServicesVerified": false,
+  "sourceHashes": {
+    "Code.gs": "3d96d3d72e97443c386fde387471bc107b4d3a1a16282c74a00e8fb5b8e067c3",
+    "Diagnostics.gs": "1db487d952c657de8ba5f8c20a2b0c531557f4b3b8a018a31467e2fa1f96f3f9",
+    "Engine.gs": "67f30b9e7cfd0579ebec2758a09202ce4570c11e061edef945f4a4c64fc5f053",
+    "appsscript.json": "78516518ebe75e8c838a6c6d893c02870f0e87e9cd8fe71eb0fc985d093cfb98"
+  }
+}

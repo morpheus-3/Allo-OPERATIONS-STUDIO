@@ -1,0 +1,160 @@
+TAP version 13
+# Subtest: Sheets API adapter: setup is repeatable and builds all sheet/protection structures
+ok 1 - Sheets API adapter: setup is repeatable and builds all sheet/protection structures
+  ---
+  duration_ms: 45.4443
+  type: 'test'
+  ...
+# Subtest: employee completes using Sheets API adapter persistence, metadata locks and next cycle inherits protections
+ok 2 - employee completes using Sheets API adapter persistence, metadata locks and next cycle inherits protections
+  ---
+  duration_ms: 15.0457
+  type: 'test'
+  ...
+# Subtest: protected ranges deny wrong employee, system metadata, unknown rows and wrong manager
+ok 3 - protected ranges deny wrong employee, system metadata, unknown rows and wrong manager
+  ---
+  duration_ms: 15.3194
+  type: 'test'
+  ...
+# Subtest: missing ticket resets checkbox without erasing typed evidence or manager note
+ok 4 - missing ticket resets checkbox without erasing typed evidence or manager note
+  ---
+  duration_ms: 16.5796
+  type: 'test'
+  ...
+# Subtest: dry-run manager alert, simulated manager edit, completion and review close escalation
+ok 5 - dry-run manager alert, simulated manager edit, completion and review close escalation
+  ---
+  duration_ms: 22.3608
+  type: 'test'
+  ...
+# Subtest: installing automation twice keeps one timer and one edit trigger; health reports mode
+ok 6 - installing automation twice keeps one timer and one edit trigger; health reports mode
+  ---
+  duration_ms: 12.4343
+  type: 'test'
+  ...
+# Subtest: MailApp adapter simulates sending unique stages and catches up leadership without duplicates
+ok 7 - MailApp adapter simulates sending unique stages and catches up leadership without duplicates
+  ---
+  duration_ms: 12.7261
+  type: 'test'
+  ...
+# Subtest: one failed delivery does not block other employee alerts
+ok 8 - one failed delivery does not block other employee alerts
+  ---
+  duration_ms: 11.462
+  type: 'test'
+  ...
+# Subtest: proof-only edit never attributes an already queued completion to another action
+ok 9 - proof-only edit never attributes an already queued completion to another action
+  ---
+  duration_ms: 9.6556
+  type: 'test'
+  ...
+# Subtest: strict configuration rejects duplicate IDs and unsafe dry-run values before alerts
+ok 10 - strict configuration rejects duplicate IDs and unsafe dry-run values before alerts
+  ---
+  duration_ms: 9.6498
+  type: 'test'
+  ...
+# Subtest: preview completes and prepares next cycle using the shared engine
+ok 11 - preview completes and prepares next cycle using the shared engine
+  ---
+  duration_ms: 34.2225
+  type: 'test'
+  ...
+# Subtest: preview runs manager and leadership flows without repeated alerts
+ok 12 - preview runs manager and leadership flows without repeated alerts
+  ---
+  duration_ms: 22.0152
+  type: 'test'
+  ...
+# Subtest: preview tabs, employee filter, input escaping and persistence work
+ok 13 - preview tabs, employee filter, input escaping and persistence work
+  ---
+  duration_ms: 31.8221
+  type: 'test'
+  ...
+# Subtest: preview blocks empty tickets and early future completion
+ok 14 - preview blocks empty tickets and early future completion
+  ---
+  duration_ms: 10.8558
+  type: 'test'
+  ...
+# Subtest: 1: 7/15/30 day completion creates one next cycle, completion anchored
+ok 15 - 1: 7/15/30 day completion creates one next cycle, completion anchored
+  ---
+  duration_ms: 39.2094
+  type: 'test'
+  ...
+# Subtest: 2: single-point ticket completion records actual editor, timestamp, next cycle
+ok 16 - 2: single-point ticket completion records actual editor, timestamp, next cycle
+  ---
+  duration_ms: 5.9325
+  type: 'test'
+  ...
+# Subtest: 3: daily attestation needs no ticket; Friday rolls to Monday
+ok 17 - 3: daily attestation needs no ticket; Friday rolls to Monday
+  ---
+  duration_ms: 6.9392
+  type: 'test'
+  ...
+# Subtest: 4: manager alerted at same-day cutoff, not before
+ok 18 - 4: manager alerted at same-day cutoff, not before
+  ---
+  duration_ms: 2.8101
+  type: 'test'
+  ...
+# Subtest: 5: manager acknowledgment requires manager identity and action note
+ok 19 - 5: manager acknowledgment requires manager identity and action note
+  ---
+  duration_ms: 3.9739
+  type: 'test'
+  ...
+# Subtest: 6/7: escalate missing acknowledgment at 4h, unresolved acknowledged work at 24h
+ok 20 - 6/7: escalate missing acknowledgment at 4h, unresolved acknowledged work at 24h
+  ---
+  duration_ms: 3.0214
+  type: 'test'
+  ...
+# Subtest: 8: repeated jobs do not duplicate cycles or manager/leadership alerts
+ok 21 - 8: repeated jobs do not duplicate cycles or manager/leadership alerts
+  ---
+  duration_ms: 4.1974
+  type: 'test'
+  ...
+# Subtest: reject missing ticket, missing identity, wrong employee, early completion
+ok 22 - reject missing ticket, missing identity, wrong employee, early completion
+  ---
+  duration_ms: 10.2544
+  type: 'test'
+  ...
+# Subtest: completed task still escalates if required manager review is missing
+ok 23 - completed task still escalates if required manager review is missing
+  ---
+  duration_ms: 2.4015
+  type: 'test'
+  ...
+# Subtest: send failure is held for review and not retried automatically
+ok 24 - send failure is held for review and not retried automatically
+  ---
+  duration_ms: 3.9395
+  type: 'test'
+  ...
+# Subtest: successful live delivery logs once and refuses placeholder recipients
+ok 25 - successful live delivery logs once and refuses placeholder recipients
+  ---
+  duration_ms: 2.8634
+  type: 'test'
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 299.879
