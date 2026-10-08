@@ -70,3 +70,18 @@ test('partial task rows still fail validation instead of being silently discarde
   master.getRange(12,2).setValue('Missing ID');master.getRange(12,9).setValue(false);
   assert.throws(()=>g.ctx.runAutomation(),/TaskID/);
 });
+test('new cycles use the next logical row despite far-away FALSE placeholders',()=>{
+  const g=fixture(),s=g.ss.getSheetByName('Workboard');s.getRange(999,9).setValue(false);
+  g.userEdit(3,8,'TICKET','employeeb@allo.test');g.userEdit(3,9,true,'employeeb@allo.test');
+  const next=g.ctx.records('Workboard').find(r=>r.TaskID==='TASK-2'&&!r.CompletedAt);assert.equal(next._row,6);
+});
+test('compacting Workboard preserves cycle data and ledger with a protected backup',()=>{
+  const g=fixture(),s=g.ss.getSheetByName('Workboard');
+  const original=g.ctx.records('Workboard').map(({_row,...data})=>data);
+  const raw=s.getRange(2,1,4,19).getValues();s.getRange(2,1,4,19).clearContent();s.getRange(1001,1,4,19).setValues(raw);s.maxRows=1004;
+  g.ctx.compactWorkboard();
+  assert.deepEqual(g.ctx.records('Workboard').map(({_row,...data})=>data),original);
+  assert.equal(g.ctx.records('Workboard')[0]._row,2);assert.equal(g.ctx.records('EmailLog').length,0);
+  const backup=g.ss.getSheets().find(sh=>sh.name.startsWith('Workboard_Backup_'));assert.ok(backup);assert.equal(backup.getProtections('SHEET').length,1);
+  g.ctx.compactWorkboard();assert.equal(g.ss.getSheets().filter(sh=>sh.name.startsWith('Workboard_Backup_')).length,1);
+});

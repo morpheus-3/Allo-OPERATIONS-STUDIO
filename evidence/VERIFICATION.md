@@ -4,7 +4,7 @@ Release: 1.1.0
 
 Runtime: v22.22.3
 
-Tests: 27/27 passed; 0 failed.
+Tests: 29/29 passed; 0 failed.
 
 Built standalone demo.html from shared engine and preview source.
 

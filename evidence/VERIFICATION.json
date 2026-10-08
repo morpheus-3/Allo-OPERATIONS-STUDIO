@@ -1,13 +1,13 @@
 {
   "release": "1.1.0",
-  "verifiedAtUTC": "2026-10-08T11:59:30.867Z",
+  "verifiedAtUTC": "2026-10-08T12:08:21.560Z",
   "runtime": "v22.22.3",
-  "tests": 27,
-  "passed": 27,
+  "tests": 29,
+  "passed": 29,
   "failed": 0,
   "realGoogleServicesVerified": false,
   "sourceHashes": {
-    "Code.gs": "153a469f07ed7589bf94b0ca986d382d8e30e3108fa4e5fb5845a62321b6a287",
+    "Code.gs": "ba2d99033d16d2306b1f8c36cc30425e7a2ce8529468625e460123cac5f33b67",
     "Diagnostics.gs": "1db487d952c657de8ba5f8c20a2b0c531557f4b3b8a018a31467e2fa1f96f3f9",
     "Engine.gs": "67f30b9e7cfd0579ebec2758a09202ce4570c11e061edef945f4a4c64fc5f053",
     "appsscript.json": "78516518ebe75e8c838a6c6d893c02870f0e87e9cd8fe71eb0fc985d093cfb98"

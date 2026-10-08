@@ -8,7 +8,7 @@ Use this factual project summary on your portfolio after replacing the candidate
 
 **Key decisions:** Completion-anchored recurrence; explicit 4h review and 24h resolution SLAs; durable email-stage reservations; separate completion and management review; strict configuration and editor-identity validation.
 
-**Evidence:** 27 passing local tests and eight deterministic assignment scenarios. Includes Google-service adapter tests, a standalone interactive walkthrough, an importable workbook, deployment diagnostics and a documented recovery process. Live Google account and email verification are tracked separately; update this statement only after those checks pass.
+**Evidence:** 29 passing local tests and eight deterministic assignment scenarios. Includes Google-service adapter tests, a standalone interactive walkthrough, an importable workbook, deployment diagnostics and a documented recovery process. Live Google account and email verification are tracked separately; update this statement only after those checks pass.
 
 **Technology:** Google Sheets, Google Apps Script V8, JavaScript, Node.js built-in test runner; Python used only to generate the workbook/report/package.
 

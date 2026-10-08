@@ -10,6 +10,7 @@ function googleAdapter() {
     setWarningOnly(){return this;}addEditor(u){const email=typeof u==='string'?u:u.getEmail();if(!this.editors.includes(email))this.editors.push(email);return this;}
     getEditors(){return this.editors.map(user);}removeEditors(users){this.editors=this.editors.filter(e=>!users.some(u=>u.getEmail()===e));return this;}
     canDomainEdit(){return false;}setDomainEdit(){return this;}setUnprotectedRanges(r){this.exempt=r;return this;}
+    remove(){this.sheet.protections=this.sheet.protections.filter(p=>p!==this);}
   }
   const col=v=>[...v].reduce((a,c)=>a*26+c.charCodeAt(0)-64,0);
   class Range {
@@ -25,13 +26,15 @@ function googleAdapter() {
     setValues(values){if(values.length!==this.rows||values.some(r=>r.length!==this.cols))throw Error('Shape mismatch');values.forEach((row,r)=>row.forEach((v,c)=>{this.sheet.cells[this.row+r-1]??=[];this.sheet.cells[this.row+r-1][this.column+c-1]=v;}));return this;}
     setValue(v){if(this.rows===1&&this.cols===1)return this.setValues([[v]]);throw Error('Use setValues for larger range');}
     setFormula(v){return this.setValue(v);}setBackground(){return this;}setFontColor(){return this;}setFontWeight(){return this;}setDataValidation(){return this;}setNumberFormat(){return this;}setNote(){return this;}
-    createFilter(){this.sheet.filter=true;return this;}protect(){const p=new Protection(this.sheet,this,'RANGE');this.sheet.protections.push(p);return p;}
+    createFilter(){this.sheet.filter={remove:()=>{this.sheet.filter=null;}};return this;}protect(){const p=new Protection(this.sheet,this,'RANGE');this.sheet.protections.push(p);return p;}
+    clearContent(){return this.setValues(Array.from({length:this.rows},()=>Array(this.cols).fill('')));}
     contains(row,column){return row>=this.row&&row<=this.getLastRow()&&column>=this.column&&column<=this.getLastColumn();}
   }
   class Sheet {
     constructor(name){this.name=name;this.cells=[];this.maxRows=1000;this.protections=[];}
     getName(){return this.name;}getLastRow(){for(let i=this.cells.length-1;i>=0;i--)if(this.cells[i]?.some(v=>v!==''&&v!==undefined))return i+1;return 0;}
     getMaxRows(){return this.maxRows;}getRange(...args){return new Range(this,...args);}appendRow(row){this.cells[this.getLastRow()]=[...row];return this;}
+    insertRowsAfter(row,count){this.maxRows+=count;return this;}
     setFrozenRows(){return this;}autoResizeColumns(){return this;}setColumnWidth(){return this;}setConditionalFormatRules(){return this;}getFilter(){return this.filter;}clearContents(){this.cells=[];return this;}
     getProtections(type){return this.protections.filter(p=>p.type===type);}protect(){const p=new Protection(this,null,'SHEET');this.protections.push(p);return p;}
   }

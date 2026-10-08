@@ -19,6 +19,6 @@ Updated delivery scope: the user chose GitHub publication instead of live Google
 
 No hiring outcome is claimed or guaranteed. The submission will describe only features and results supported by evidence.
 
-Release 1.1.0: 27/27 tests pass. Run `npm run verify` to reproduce evidence. Run `npm run package` to regenerate and verify the release archive (Python build dependencies required). Local completion does not close the live-account checkpoints.
+Release 1.1.0: 29/29 tests pass. Run `npm run verify` to reproduce evidence. Run `npm run package` to regenerate and verify the release archive (Python build dependencies required). Local completion does not close the live-account checkpoints.
 
 Screenshot review improvements: distinct overview/manager views, full-width labelled proof inputs, working mobile navigation, filtered audit log, compact demo controls and collapsed submission notes. Verified by preview-flow tests.

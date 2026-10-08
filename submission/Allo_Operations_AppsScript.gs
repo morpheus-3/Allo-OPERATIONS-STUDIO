@@ -74,7 +74,8 @@ function onOpen() {
   SpreadsheetApp.getUi().createMenu('Allo Operations')
     .addItem('Set up prototype', 'setup').addItem('Run automation now', 'runAutomation')
     .addItem('Install automation triggers', 'installTriggers')
-    .addItem('Run health check', 'runHealthCheck').addToUi();
+    .addItem('Run health check', 'runHealthCheck')
+    .addItem('Move Workboard data to the top', 'compactWorkboard').addToUi();
 }
 function book() {
   const id = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
@@ -99,7 +100,12 @@ function save(name, obj) {
     // Refresh generated fields without overwriting concurrent human input.
     [[10,4],[15,2],[18,2]].forEach(([start,length])=>s.getRange(obj._row,start,1,length).setValues([row.slice(start-1,start-1+length)]));
   } else if (obj._row) s.getRange(obj._row,1,1,row.length).setValues([row]);
-  else { s.appendRow(row); obj._row=s.getLastRow(); }
+  else {
+    // Physical lastRow can include thousands of FALSE checkbox placeholders.
+    obj._row=records(name).reduce((last,r)=>Math.max(last,r._row),1)+1;
+    if(obj._row>s.getMaxRows())s.insertRowsAfter(s.getMaxRows(),obj._row-s.getMaxRows());
+    s.getRange(obj._row,1,1,row.length).setValues([row]);
+  }
   SpreadsheetApp.flush();
 }
 function settings() {
@@ -143,11 +149,11 @@ function setup() {
   master.getRange('E2:E').setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['1','7','15','30'],true).setAllowInvalid(false).build());
   master.getRange('F2:F').setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['DAILY','TICKET'],true).setAllowInvalid(false).build());
   master.getRange('H2:H').setDataValidation(SpreadsheetApp.newDataValidation().requireNumberBetween(0,23).setAllowInvalid(false).build());
-  master.getRange('I2:I').setDataValidation(SpreadsheetApp.newDataValidation().requireCheckbox().build());
+  records('Tasks').forEach(t=>master.getRange(t._row,9).setDataValidation(SpreadsheetApp.newDataValidation().requireCheckbox().build()));
   master.getRange('G2:G').setNumberFormat('yyyy-mm-dd');
   const board=ss.getSheetByName('Workboard');
   if (!board.getFilter()) board.getRange(1,1,board.getMaxRows(),HEADERS.Workboard.length).createFilter();
-  [9,14].forEach(col=>board.getRange(2,col,board.getMaxRows()-1,1).setDataValidation(SpreadsheetApp.newDataValidation().requireCheckbox().build()));
+  records('Workboard').forEach(formatCycle);
   [6,11,13,16,18].forEach(col=>board.getRange(2,col,board.getMaxRows()-1,1).setNumberFormat('dd mmm yyyy hh:mm'));
   board.getRange('H1').setNote('Ticket ID for portal tasks; optional evidence URL or note for daily tasks. Then check Complete.');
   board.getRange('N1').setNote('Manager only: add an action note first, then check Acknowledge.');
@@ -332,6 +338,28 @@ function formatCycle(c) {
 function requireOwner() {
   const owner=PropertiesService.getScriptProperties().getProperty('AUTOMATION_OWNER');
   if (!owner || owner!==Session.getEffectiveUser().getEmail()) throw new Error('Run this action as the configured automation owner.');
+}
+function compactWorkboard() {
+  requireOwner();
+  locked(()=>{
+    const s=book().getSheetByName('Workboard'),rows=records('Workboard');
+    if(!rows.length || rows.every((r,i)=>r._row===i+2))return;
+    const values=rows.map(r=>HEADERS.Workboard.map(h=>r[h]));
+    // Preserve all cycle data before changing coordinates. EmailLog is untouched.
+    const backup=book().insertSheet('Workboard_Backup_'+new Date().getTime());
+    backup.getRange(1,1,1,HEADERS.Workboard.length).setValues([HEADERS.Workboard]);
+    backup.getRange(2,1,values.length,HEADERS.Workboard.length).setValues(values);
+    restrict(backup.protect().setDescription('ALLO:backup'),[]);
+    SpreadsheetApp.flush();
+    if(s.getFilter())s.getFilter().remove();
+    s.getProtections(SpreadsheetApp.ProtectionType.RANGE).filter(p=>p.getDescription().startsWith('ALLO:')).forEach(p=>p.remove());
+    s.getRange(2,1,s.getLastRow()-1,HEADERS.Workboard.length).clearContent();
+    s.getRange(2,1,values.length,HEADERS.Workboard.length).setValues(values);
+    rows.forEach((r,i)=>{r._row=i+2;formatCycle(r);});
+    protectWorkbook();
+    s.getRange(1,1,s.getMaxRows(),HEADERS.Workboard.length).createFilter();
+    SpreadsheetApp.flush();
+  });
 }
 
 
