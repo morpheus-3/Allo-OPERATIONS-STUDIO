@@ -15,7 +15,7 @@ Updated delivery scope: the user chose GitHub publication instead of live Google
 | 7. Submission package and handover | Complete | XLSX template, bundled/separate source, DOCX report, guides, unsent email draft, verified ZIP and SHA-256 manifest |
 | 8. Live Google Sheet creation and authorization | Deferred by user; outside GitHub delivery scope | Installer and deployment guide supplied; no live Sheet claimed |
 | 9. Hosted identity, protections and real-email verification | Deferred by user; outside GitHub delivery scope | Local adapters verified; real Google receipts not claimed |
-| 10. GitHub publication and company handover | Publication in progress; email not sent | Repository: https://github.com/morpheus-3/Allo-OPERATIONS-STUDIO; contact fields remain for candidate |
+| 10. GitHub publication and company handover | Published to main; company email not sent | Repository: https://github.com/morpheus-3/Allo-OPERATIONS-STUDIO; complete package included; contact fields remain for candidate |
 
 No hiring outcome is claimed or guaranteed. The submission will describe only features and results supported by evidence.
 
