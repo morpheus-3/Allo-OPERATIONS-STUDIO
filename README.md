@@ -8,7 +8,7 @@ This submission contains the complete source, runnable offline demonstration, Go
 
 - Download `release/Allo_AI_Operations_Manager_v1.1.0.zip`, extract it, and open `demo.html` in a browser.
 - Read `submission/SOLUTION_REPORT.docx` and `submission/START_HERE.md` for the implementation and demonstration route.
-- Run `npm run verify` with Node.js 18+ to reproduce all 25 local tests and the eight assignment scenarios. No npm dependencies are required.
+- Run `npm run verify` with Node.js 18+ to reproduce all 27 local tests and the eight assignment scenarios. No npm dependencies are required.
 - Google Sheets installation is documented below and in `submission/DEPLOYMENT.md` for anyone who wants to run the automation in their own account.
 
 Delivery scope: GitHub source and downloadable prototype. No public website or live Google Sheet is deployed. Browser users, clocks and emails are simulated; actual Google permissions and email receipt have not been verified.

@@ -88,7 +88,9 @@ function records(name) {
   if (s.getLastRow() < 2) return [];
   return s.getRange(2,1,s.getLastRow()-1,HEADERS[name].length).getValues().map((row,i) => {
     const obj = {_row:i+2}; HEADERS[name].forEach((h,j) => obj[h]=row[j]); return obj;
-  }).filter(obj=>HEADERS[name].some(h=>obj[h]!=='' && obj[h]!==null));
+  // Unchecked checkboxes can leave FALSE in otherwise empty spreadsheet rows.
+  // Keep real partial records for validation, but ignore checkbox-only blanks.
+  }).filter(obj=>HEADERS[name].some(h=>obj[h]!==false && String(obj[h] ?? '').trim()!==''));
 }
 function save(name, obj) {
   const s = book().getSheetByName(name);

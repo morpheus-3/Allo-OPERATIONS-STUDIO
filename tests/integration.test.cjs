@@ -58,3 +58,15 @@ test('strict configuration rejects duplicate IDs and unsafe dry-run values befor
   const g=fixture();g.ss.getSheetByName('Settings').getRange(6,2).setValue('maybe');assert.throws(()=>g.ctx.runAutomation(),/DryRun/);assert.equal(g.sent.length,0);
   g.ss.getSheetByName('Settings').getRange(6,2).setValue(true);g.ss.getSheetByName('Tasks').getRange(3,1).setValue('TASK-1');assert.throws(()=>g.ctx.runAutomation(),/Duplicate/);
 });
+test('empty rows with unchecked checkboxes do not become phantom tasks or cycles',()=>{
+  const g=fixture();g.ss.getSheetByName('Tasks').getRange(20,9).setValue(false);
+  const board=g.ss.getSheetByName('Workboard');board.getRange(30,9).setValue(false);board.getRange(30,14).setValue(false);
+  assert.equal(g.ctx.records('Tasks').length,4);assert.equal(g.ctx.records('Workboard').length,4);
+  g.ctx.setup();g.ctx.runAutomation();assert.equal(g.ctx.records('Workboard').length,4);
+  assert.equal(g.ctx.settings().DryRun,true);
+});
+test('partial task rows still fail validation instead of being silently discarded',()=>{
+  const g=fixture();const master=g.ss.getSheetByName('Tasks');
+  master.getRange(12,2).setValue('Missing ID');master.getRange(12,9).setValue(false);
+  assert.throws(()=>g.ctx.runAutomation(),/TaskID/);
+});

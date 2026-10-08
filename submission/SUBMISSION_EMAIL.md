@@ -17,7 +17,7 @@ The package includes:
 Project repository and downloadable prototype: https://github.com/morpheus-3/Allo-OPERATIONS-STUDIO
 Portfolio / GitHub: [YOUR PORTFOLIO LINK]
 
-Verification status: all 25 local tests and eight deterministic assignment scenarios pass. This submission is a downloadable prototype with complete Google Sheets automation source and setup instructions. A live Google Sheet and actual email receipts have not been verified.
+Verification status: all 27 local tests and eight deterministic assignment scenarios pass. This submission is a downloadable prototype with complete Google Sheets automation source and setup instructions. A live Google Sheet and actual email receipts have not been verified.
 
 I would be happy to walk through the system and explain the design decisions and limitations.
 
