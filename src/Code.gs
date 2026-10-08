@@ -205,7 +205,7 @@ function runAutomation() {
     validateSettings(cfg);
     ensureCycles(now);
     records('Workboard').forEach(c=>{
-      const priorStatus=c.Status;
+      const priorStatus=c.Status,priorError=c.Error;
       c.Status=statusFor(c,now);
       const stage=alertFor(c,now,Number(cfg.AckHours),Number(cfg.ResolveHours));
       if (stage) {
@@ -215,7 +215,12 @@ function runAutomation() {
         if (log && ['SENT','DRY_RUN'].includes(log.DeliveryStatus)) c[stage==='MANAGER'?'ManagerAlertAt':'LeadershipAlertAt']=log.SentAt||log.CreatedAt;
         else c.Error='Email delivery needs review in EmailLog.';
       }
-      if (stage || priorStatus!==c.Status) save('Workboard',c);
+      // Successful recovery clears mail errors, preserving validation errors.
+      if (String(c.Error).startsWith('Alert failed:') || c.Error==='Email delivery needs review in EmailLog.') {
+        const attempts=records('EmailLog').filter(r=>r.CycleID===c.CycleID);
+        if(attempts.length && attempts.every(r=>['SENT','DRY_RUN'].includes(r.DeliveryStatus)))c.Error='';
+      }
+      if (stage || priorStatus!==c.Status || priorError!==c.Error) save('Workboard',c);
     });
     PropertiesService.getScriptProperties().setProperty('LAST_SUCCESSFUL_RUN',now.toISOString());
   });

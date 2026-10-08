@@ -1,5 +1,5 @@
 To: hr.ops.allo@gmail.com
-Subject: AI Operations Manager Assignment — Recurring Task Tracking & Escalation Prototype — [YOUR NAME]
+Subject: AI Operations Manager Assignment â€” Recurring Task Tracking & Escalation Prototype â€” [YOUR NAME]
 
 Dear Allo Innoware Hiring Team,
 
@@ -14,17 +14,19 @@ The package includes:
 - An interactive offline walkthrough and reproducible tests covering the eight requested scenarios.
 - Setup, demonstration, delivery recovery and handover instructions.
 
+Working Google Sheet: [ADD YOUR SHEET LINK AND GRANT EVALUATOR ACCESS]
+
 Project repository and downloadable prototype: https://github.com/morpheus-3/Allo-OPERATIONS-STUDIO
 Portfolio / GitHub: [YOUR PORTFOLIO LINK]
 
-Verification status: all 29 local tests and eight deterministic assignment scenarios pass. This submission is a downloadable prototype with complete Google Sheets automation source and setup instructions. A live Google Sheet and actual email receipts have not been verified.
+Verification status: all 30 local tests and eight deterministic assignment scenarios pass. This submission is a downloadable prototype with complete Google Sheets automation source and setup instructions. A live Sheet was subsequently configured and tested for completion, acknowledgement, manager/leadership receipt and duplicate prevention using one test account. Leadership timing was accelerated manually; distinct-user permissions remain untested.
 
 I would be happy to walk through the system and explain the design decisions and limitations.
 
 Regards,
 [YOUR NAME]
 [YOUR CONTACT EMAIL]
-[PHONE — OPTIONAL]
+[PHONE â€” OPTIONAL]
 
 ---
 Draft only. No message has been sent. Fill the candidate fields, attach the release package if desired, and remove this instruction block before sending.

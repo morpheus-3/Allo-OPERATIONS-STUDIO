@@ -2,7 +2,7 @@
 
 Status reflects evidence, not a promise. Google-hosted checks must pass before calling this a fully verified live submission.
 
-Updated delivery scope: the user chose GitHub publication instead of live Google deployment. Checkpoints 8 and 9 are deferred by that decision, not marked as passed. The GitHub submission includes all local deliverables and documents the hosted setup requirements honestly.
+GitHub publication is complete. The user subsequently deployed a live Sheet with guided instructions; hosted results are user-reported and documented in HOSTED_ACCEPTANCE.md.
 
 | Checkpoint | Status | Acceptance evidence |
 | --- | --- | --- |
@@ -13,12 +13,12 @@ Updated delivery scope: the user chose GitHub publication instead of live Google
 | 5. Configuration validation and operational health | Complete locally | Strict dates/IDs/SLA/dry-run validation; trigger, quota, reservation, protection and heartbeat diagnostics |
 | 6. Repeatable eight-scenario demonstration | Complete locally | All eight scenarios pass; evidence/DEMO_RESULTS.json and hosted acceptance checklist |
 | 7. Submission package and handover | Complete | XLSX template, bundled/separate source, DOCX report, guides, unsent email draft, verified ZIP and SHA-256 manifest |
-| 8. Live Google Sheet creation and authorization | Deferred by user; outside GitHub delivery scope | Installer and deployment guide supplied; no live Sheet claimed |
-| 9. Hosted identity, protections and real-email verification | Deferred by user; outside GitHub delivery scope | Local adapters verified; real Google receipts not claimed |
+| 8. Live Google Sheet creation and authorization | User-reported complete | Successful setup logs, populated tables and mail quota check |
+| 9. Core live workflow and email verification | User-reported pass; final checks documented | Completion, acknowledgement, manager/leadership receipt and duplicate checks confirmed; distinct-user permission testing and final Health check remain |
 | 10. GitHub publication and company handover | Published to main; company email not sent | Repository: https://github.com/morpheus-3/Allo-OPERATIONS-STUDIO; complete package included; contact fields remain for candidate |
 
 No hiring outcome is claimed or guaranteed. The submission will describe only features and results supported by evidence.
 
-Release 1.1.0: 29/29 tests pass. Run `npm run verify` to reproduce evidence. Run `npm run package` to regenerate and verify the release archive (Python build dependencies required). Local completion does not close the live-account checkpoints.
+Release 1.1.0: 30/30 tests pass. Run `npm run verify` to reproduce evidence. Run `npm run package` to regenerate and verify the release archive (Python build dependencies required). Local completion does not close the live-account checkpoints.
 
 Screenshot review improvements: distinct overview/manager views, full-width labelled proof inputs, working mobile navigation, filtered audit log, compact demo controls and collapsed submission notes. Verified by preview-flow tests.

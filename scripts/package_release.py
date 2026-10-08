@@ -35,7 +35,7 @@ guide = wb.active
 guide.title = 'Guide'
 guide.append(['ALLO INNOWARE | RECURRING OPERATIONS', 'REVIEWER / OWNER GUIDE'])
 for row in [
-    ['Prototype status', 'Template and local tests supplied; live Google authorization and email receipts pending.'],
+    ['Prototype status', 'Template/local tests supplied; core live workflow and email tests reported by user. See HOSTED_ACCEPTANCE.md.'],
     ['Important', 'This XLSX does not contain or execute Apps Script. Open as a Google Sheet and deploy the supplied script.'],
     ['1. Import', 'Upload to Google Drive and open as a Google Sheet, or use a blank Sheet.'],
     ['2. Script', 'Extensions > Apps Script: paste Allo_Operations_AppsScript.gs, or all three separate source files, not both.'],
@@ -46,7 +46,7 @@ for row in [
     ['7. Employee', 'Use a Workboard filter view. Ticket ID in Proof, then check Complete. Daily tasks use attestation.'],
     ['8. Manager', 'Read Manager view, enter action note in Workboard Q and check Acknowledge N.'],
     ['9. Acceptance', 'Use DEPLOYMENT.md and HOSTED_ACCEPTANCE.md. Verify real users and actual received emails.'],
-    ['Recurrence', 'Completion anchored: +7/15/30 calendar days. Daily: next Monday–Friday. Holidays not modeled.'],
+    ['Recurrence', 'Completion anchored: +7/15/30 calendar days. Daily: next Mondayâ€“Friday. Holidays not modeled.'],
     ['SLA', '17:00 IST cutoff; manager poll every 5m; leadership after 4h without review or 24h unresolved.'],
     ['Delivery', 'One reserved key per cycle/stage. Ambiguous mail delivery requires owner review.'],
     ['Local evidence', f"{verification['passed']}/{verification['tests']} tests passed; all 8 deterministic scenarios passed. These use local adapters."],
@@ -133,7 +133,7 @@ doc.add_paragraph('The system gives four employees one Google Sheets Workboard t
 doc.add_heading('Daily task completion tracking',1)
 doc.add_paragraph('After posting the daily WhatsApp update, Employee A checks Complete in the same Workboard row. An evidence URL or short note is optional. The checkbox records authenticated employee attestation and time; it is not independent proof that the message was posted. Portal tasks require a Ticket ID, whose presence is validated without claiming access to an unspecified external portal.')
 doc.add_heading('Recurring cycles and single-point updates',1)
-doc.add_paragraph('For portal tasks, the next due date is the actual completion calendar date plus 7, 15 or 30 days, at the configured cutoff. Daily work advances to the next Monday–Friday. One unresolved cycle stays open; missed dates do not generate duplicate work. Completion-anchored recurrence deliberately shifts deadlines after late completion. Employees never calculate dates or repeat the update in another sheet.')
+doc.add_paragraph('For portal tasks, the next due date is the actual completion calendar date plus 7, 15 or 30 days, at the configured cutoff. Daily work advances to the next Mondayâ€“Friday. One unresolved cycle stays open; missed dates do not generate duplicate work. Completion-anchored recurrence deliberately shifts deadlines after late completion. Employees never calculate dates or repeat the update in another sheet.')
 doc.add_heading('Manager alerts and leadership SLA',1)
 table=doc.add_table(rows=1, cols=3);table.style='Light Shading Accent 1'
 for cell,text in zip(table.rows[0].cells,['Stage','Timing / condition','Action']):cell.text=text
@@ -162,7 +162,7 @@ doc.add_paragraph(f"Verification: {verification['passed']}/{verification['tests'
 doc.add_heading('Deliverables and handover',1)
 doc.add_paragraph('The package includes the importable workbook, complete Apps Script bundle and separate source files, interactive offline walkthrough, local verification scripts, eight-scenario report, deployment guide, hosted acceptance record, requirement map and an unsent company email draft. Runtime has no third-party Node dependencies. Python document-generation libraries are build-only.')
 doc.add_heading('Final acceptance status',1)
-doc.add_paragraph('Local source, simulation and documentation checkpoints are complete. A live Google Sheet URL, owner authorization, actual employee/manager identity tests, real manager/leadership email receipts and candidate contact/portfolio details remain pending. The XLSX template does not embed Apps Script. Follow DEPLOYMENT.md and complete HOSTED_ACCEPTANCE.md before describing this as a fully verified live submission.')
+doc.add_paragraph('Local checks are complete. The user subsequently deployed a live Sheet and confirmed completion, acknowledgement, actual manager/leadership receipts and duplicate prevention. These are user-reported tests using one account for all roles; distinct-user permission testing and final Health confirmation remain. See HOSTED_ACCEPTANCE.md. The XLSX template does not embed Apps Script.')
 doc.add_heading('Practical limitations and next steps',1)
 doc.add_paragraph('Holidays are not modeled; the business should confirm its work calendar and SLA before use. Ticket IDs are not checked against a company portal. WhatsApp posting is attested rather than independently verified. Shared Sheet visibility is not per-employee confidentiality. If stronger isolation is required, use a separately controlled backend and authorized portal/messaging integrations.')
 footer=sec.footer.paragraphs[0]

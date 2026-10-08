@@ -70,6 +70,17 @@ test('partial task rows still fail validation instead of being silently discarde
   master.getRange(12,2).setValue('Missing ID');master.getRange(12,9).setValue(false);
   assert.throws(()=>g.ctx.runAutomation(),/TaskID/);
 });
+test('successful delivery recovery clears mail errors but preserves validation errors',()=>{
+  const g=fixture();g.setTime('2026-10-08T17:00:00+05:30');g.ctx.runAutomation();
+  const s=g.ss.getSheetByName('Workboard');
+  s.getRange(2,19).setValue('Email delivery needs review in EmailLog.');
+  s.getRange(3,19).setValue('Enter a Ticket ID before checking Complete.');
+  s.getRange(4,19).setValue('Alert failed: permission denied');
+  g.ctx.runAutomation();
+  assert.equal(g.ctx.records('Workboard')[0].Error,'');
+  assert.match(g.ctx.records('Workboard')[1].Error,/Ticket ID/);
+  assert.equal(g.ctx.records('Workboard')[2].Error,'');
+});
 test('new cycles use the next logical row despite far-away FALSE placeholders',()=>{
   const g=fixture(),s=g.ss.getSheetByName('Workboard');s.getRange(999,9).setValue(false);
   g.userEdit(3,8,'TICKET','employeeb@allo.test');g.userEdit(3,9,true,'employeeb@allo.test');
