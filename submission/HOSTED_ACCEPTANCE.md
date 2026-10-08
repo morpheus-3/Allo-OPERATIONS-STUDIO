@@ -19,8 +19,10 @@ The demonstration uses one owner-controlled account for all dummy roles. It does
 | Duplicate prevention | User-reported pass | User confirmed one MANAGER and one LEADERSHIP SENT entry after rerun |
 | Separate-user permissions | Not tested live | One-account demo cannot prove isolation |
 | Employee filter views | Not independently verified | Setup instructions supplied |
-| Final Health check | Awaiting confirmation | Run runHealthCheck after installing the latest script |
+| Final Health check | Pass from user-pasted results | 8 October 2026, 18:40:23 IST: all 11 automated checks PASS; mode LIVE; manual distinct-user check remains |
 
 Defects discovered during guided deployment were corrected in GitHub: checkbox-only blank records, cycles appended far below the header, and stale email errors after recovery. Regression tests cover these cases. Update the bound script to apply the latest correction.
 
 No personal email addresses or credentials are included here. Supply the actual Sheet link directly to the evaluator with appropriate access.
+
+Final health evidence: Settings, task configuration (5 tasks), timezone, timer/edit triggers, employee-address configuration, delivery reservations, heartbeat, uniqueness, protection objects and mail quota all passed. Mail quota was 96 recipients. Protection-object presence does not prove access isolation with separate users.

@@ -1,0 +1,11 @@
+{
+  "source": "User-pasted Health table; not independently accessed by agent",
+  "checkedAtIST": "2026-10-08 18:40:23",
+  "automatedChecksPassed": 11,
+  "taskDefinitions": 5,
+  "deliveryMode": "LIVE",
+  "remainingMailRecipients": 96,
+  "heartbeatUTC": "2026-10-08T13:09:44.976Z",
+  "manualLimit": "One account used for all roles; distinct-user permission isolation not tested",
+  "receiptEvidence": "User confirmed actual manager and leadership receipt and no duplicate stages after rerun"
+}

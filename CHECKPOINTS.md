@@ -14,7 +14,7 @@ GitHub publication is complete. The user subsequently deployed a live Sheet with
 | 6. Repeatable eight-scenario demonstration | Complete locally | All eight scenarios pass; evidence/DEMO_RESULTS.json and hosted acceptance checklist |
 | 7. Submission package and handover | Complete | XLSX template, bundled/separate source, DOCX report, guides, unsent email draft, verified ZIP and SHA-256 manifest |
 | 8. Live Google Sheet creation and authorization | User-reported complete | Successful setup logs, populated tables and mail quota check |
-| 9. Core live workflow and email verification | User-reported pass; final checks documented | Completion, acknowledgement, manager/leadership receipt and duplicate checks confirmed; distinct-user permission testing and final Health check remain |
+| 9. Core live workflow and email verification | User-reported pass; final checks documented | Completion, acknowledgement, manager/leadership receipt and duplicate checks confirmed; final Health checks PASS; distinct-user permission testing remains |
 | 10. GitHub publication and company handover | Published to main; company email not sent | Repository: https://github.com/morpheus-3/Allo-OPERATIONS-STUDIO; complete package included; contact fields remain for candidate |
 
 No hiring outcome is claimed or guaranteed. The submission will describe only features and results supported by evidence.
