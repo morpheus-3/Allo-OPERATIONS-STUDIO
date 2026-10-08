@@ -1,5 +1,9 @@
 # Allo recurring operations prototype
 
+**Submission status: working prototype complete.** The user has confirmed live workflow/email tests and passing automated Health checks. Review `HOSTED_ACCEPTANCE.md` for evidence and the one-account testing limitation.
+
+Working Sheet: https://docs.google.com/spreadsheets/d/1aLoeuykOMAq-sWQ7JCzsnpEkuSQle93c6mgVHKYYsn4/edit (request access from the candidate if needed).
+
 ## Reviewer route (about five minutes)
 
 1. Read `SOLUTION_REPORT.docx` for the problem, decisions and evidence.
@@ -20,4 +24,4 @@
 - `CHECKPOINTS.md` and `REQUIREMENTS.md`: delivery status and requirement mapping.
 - `evidence/`: generated test output and deterministic scenario results.
 
-This release can be reviewed and exercised offline immediately. A live, authorized Google Sheet and actual mail receipts are separate acceptance checkpoints and are not supplied by an XLSX or offline simulation.
+This release can be reviewed and exercised offline immediately. The accompanying live Google Sheet and actual mail receipts were subsequently confirmed by the user; the XLSX and offline simulation alone do not provide those services.

@@ -1,6 +1,12 @@
 # Allo AI Operations Manager
 
+**Status: working assignment prototype complete and submission-ready.**
+
 **Project repository:** https://github.com/morpheus-3/Allo-OPERATIONS-STUDIO
+
+**Working Google Sheet:** [Open the live prototype](https://docs.google.com/spreadsheets/d/1aLoeuykOMAq-sWQ7JCzsnpEkuSQle93c6mgVHKYYsn4/edit) (the owner must grant evaluator access).
+
+Verified locally: 30/30 tests and all eight deterministic scenarios. User-confirmed live checks: setup, completion, daily tracking, acknowledgement, manager/leadership email receipt, duplicate prevention and passing automated Health checks. Live results are recorded in `submission/HOSTED_ACCEPTANCE.md`. The demonstration used one account for all roles; separate-user access isolation remains untested.
 
 ## For reviewers
 
@@ -17,13 +23,13 @@ Google Sheets and Google Apps Script prototype for recurring tasks, employee com
 
 ## Setup
 
-1. Create a blank Google Sheet. Open **Extensions â†’ Apps Script**.
+1. Create a blank Google Sheet. Open **Extensions → Apps Script**.
 2. Copy `src/Code.gs`, `src/Engine.gs` and `src/Diagnostics.gs` into matching script files. Alternatively paste `submission/Allo_Operations_AppsScript.gs` into one script file; do not install both forms.
 3. Enable **Show appsscript.json manifest file** in project settings and replace it with `src/appsscript.json`.
 4. Save and run **setup**. Authorize the requested permissions, return to the Sheet and reload.
 5. Replace example employee emails in Tasks and manager/leadership emails in Settings. Before testing/sharing, delete the four sample Workboard data rows so setup can generate cycles with the real assignees. Run setup again to refresh protections. Share the Sheet with these accounts as editors. For future live reassignment, preserve history; Tasks changes apply to future cycles.
 6. Keep **DryRun = TRUE** while testing. Alerts are recorded without sending email. Follow DEMO.md.
-7. Install automation triggers in the dry-run test copy as well, so checkbox edits are processed. Run **Allo Operations â†’ Run health check**, resolve FAIL entries and complete the hosted acceptance steps. Use a fresh copy for live operation, update addresses, set **DryRun = FALSE**, and install triggers. Only the intended owner should install them. Reinstalling replaces that account's existing project triggers.
+7. Install automation triggers in the dry-run test copy as well, so checkbox edits are processed. Run **Allo Operations → Run health check**, resolve FAIL entries and complete the hosted acceptance steps. Use a fresh copy for live operation, update addresses, set **DryRun = FALSE**, and install triggers. Only the intended owner should install them. Reinstalling replaces that account's existing project triggers.
 
 The local project is complete. The user deployed the live Sheet with guided instructions; user-reported results are recorded in submission/HOSTED_ACCEPTANCE.md. No email has been sent to the assignment's submission address.
 
@@ -41,8 +47,8 @@ Manager: enter an actionable **ManagerNote (Q)** and check **Acknowledge (N)**. 
 
 - Timezone is Asia/Kolkata; sample cutoff is **17:00**.
 - 7/15/30-day cycles are completion-anchored: actual completion date plus interval, at DueHour. Late completion shifts the next deadline. Unresolved tasks retain one open cycle rather than accumulating duplicates.
-- Daily cycles recur on the next Mondayâ€“Friday working day. Weekends are skipped; holidays are not modeled. Friday work that remains unresolved stays open over the weekend.
-- Automation polls every five minutes. Manager receives one alert at/after cutoff, normally around 17:00â€“17:05. Google trigger scheduling is best effort, not an exact-time guarantee.
+- Daily cycles recur on the next Monday–Friday working day. Weekends are skipped; holidays are not modeled. Friday work that remains unresolved stays open over the weekend.
+- Automation polls every five minutes. Manager receives one alert at/after cutoff, normally around 17:00–17:05. Google trigger scheduling is best effort, not an exact-time guarantee.
 - Leadership receives one alert after **4 elapsed hours without acknowledgement**, or **24 elapsed hours with work still unresolved**. Nights/weekends count. These configurable windows provide same-evening management visibility and a full day for resolution.
 - Completed work still escalates if the required manager review is missing. Completion plus acknowledgement suppresses escalation.
 - One manager and one leadership alert per cycle; no repeated daily reminders. Locks serialize automation. Cycle IDs and email stage keys prevent repeated jobs duplicating work.
@@ -62,7 +68,7 @@ System fields and configuration sheets are protected. Employee proof/Complete in
 
 This is a cooperative internal prototype: collaborators who can edit the bound Apps Script must also be trusted. Range protections are operational safeguards, not an adversarial security boundary.
 
-Keep TaskID unique and stable. Supported intervals: 1, 7, 15, 30; proof types: DAILY or TICKET; DueHour: integer 0â€“23. StartDate: YYYY-MM-DD. To adjust an initial sample cycle, change Tasks, delete its sample Workboard row as owner, then run automation. Deactivating a task stops future cycles; existing open cycles still require resolution. Recipients each accept one email address.
+Keep TaskID unique and stable. Supported intervals: 1, 7, 15, 30; proof types: DAILY or TICKET; DueHour: integer 0–23. StartDate: YYYY-MM-DD. To adjust an initial sample cycle, change Tasks, delete its sample Workboard row as owner, then run automation. Deactivating a task stops future cycles; existing open cycles still require resolution. Recipients each accept one email address.
 
 ## Email failure recovery
 
