@@ -1,11 +1,32 @@
 const {test}=require('node:test'),assert=require('node:assert/strict');
 const {googleAdapter}=require('./google-adapter.cjs');
 function fixture(){const g=googleAdapter();g.ctx.setup();g.configure();return g;}
+
+test('health rejects missing, malformed, stale and implausibly future heartbeats',()=>{
+  const g=fixture();
+  for(const [value,expected] of [
+    ['', 'FAIL'],['invalid-timestamp','FAIL'],
+    ['2026-10-08T15:44:59+05:30','FAIL'],
+    ['2026-10-08T15:45:00+05:30','PASS'],
+    ['2026-10-08T16:00:00+05:30','PASS'],
+    ['2026-10-08T16:01:00+05:30','PASS'],
+    ['2026-10-08T16:01:01+05:30','FAIL']
+  ]) {
+    g.properties.LAST_SUCCESSFUL_RUN=value;
+    assert.equal(g.ctx.runHealthCheck().find(r=>r[0]==='Automation heartbeat')[1],expected,value);
+  }
+});
 test('Sheets API adapter: setup is repeatable and builds all sheet/protection structures',()=>{
   const g=fixture();g.ctx.setup();assert.equal(g.ctx.records('Tasks').length,4);assert.equal(g.ctx.records('Workboard').length,4);
   assert.equal(g.ss.getSpreadsheetTimeZone(),'Asia/Kolkata');assert.equal(g.ss.locale,'en_IN');
-  const s=g.ss.getSheetByName('Workboard');assert.equal(s.getProtections('RANGE').length,12);assert.equal(s.getProtections('SHEET').length,1);
+  const s=g.ss.getSheetByName('Workboard');assert.equal(s.getProtections('RANGE').length,16);assert.equal(s.getProtections('SHEET').length,1);
   assert.match(g.ss.getSheetByName('Manager').getRange('I3').getValues()[0][0],/P is null/);
+  const manager=g.ss.getSheetByName('Manager');
+  assert.match(manager.getRange('P3').getValues()[0][0],/Workboard!K2:K,""/);
+  assert.match(manager.getRange('P5').getValues()[0][0],/VLOOKUP\("AckHours"/);
+  assert.match(manager.getRange('P6').getValues()[0][0],/VLOOKUP\("ResolveHours"/);
+  assert.match(manager.getRange('P7').getValues()[0][0],/REVIEW_REQUIRED/);
+  assert.equal(manager.getRange('P9').getValues()[0][0],'=NOW()');
 });
 test('employee completes using Sheets API adapter persistence, metadata locks and next cycle inherits protections',()=>{
   const g=fixture();g.userEdit(3,8,'PORTAL-100','employeeb@allo.test');g.userEdit(3,9,true,'employeeb@allo.test');
@@ -89,7 +110,7 @@ test('new cycles use the next logical row despite far-away FALSE placeholders',(
 test('compacting Workboard preserves cycle data and ledger with a protected backup',()=>{
   const g=fixture(),s=g.ss.getSheetByName('Workboard');
   const original=g.ctx.records('Workboard').map(({_row,...data})=>data);
-  const raw=s.getRange(2,1,4,19).getValues();s.getRange(2,1,4,19).clearContent();s.getRange(1001,1,4,19).setValues(raw);s.maxRows=1004;
+  const raw=s.getRange(2,1,4,30).getValues();s.getRange(2,1,4,30).clearContent();s.getRange(1001,1,4,30).setValues(raw);s.maxRows=1004;
   g.ctx.compactWorkboard();
   assert.deepEqual(g.ctx.records('Workboard').map(({_row,...data})=>data),original);
   assert.equal(g.ctx.records('Workboard')[0]._row,2);assert.equal(g.ctx.records('EmailLog').length,0);

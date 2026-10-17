@@ -31,7 +31,8 @@ function googleAdapter() {
     contains(row,column){return row>=this.row&&row<=this.getLastRow()&&column>=this.column&&column<=this.getLastColumn();}
   }
   class Sheet {
-    constructor(name){this.name=name;this.cells=[];this.maxRows=1000;this.protections=[];}
+    constructor(name){this.name=name;this.cells=[];this.maxRows=1000;this.maxColumns=26;this.protections=[];}
+    getMaxColumns(){return this.maxColumns;}insertColumnsAfter(_column,count){this.maxColumns+=count;return this;}
     getName(){return this.name;}getLastRow(){for(let i=this.cells.length-1;i>=0;i--)if(this.cells[i]?.some(v=>v!==''&&v!==undefined))return i+1;return 0;}
     getMaxRows(){return this.maxRows;}getRange(...args){return new Range(this,...args);}appendRow(row){this.cells[this.getLastRow()]=[...row];return this;}
     insertRowsAfter(row,count){this.maxRows+=count;return this;}
@@ -42,7 +43,7 @@ function googleAdapter() {
   const ss={getId:()=> 'test-sheet',getUrl:()=> 'https://example.test/sheet',getSheets:()=>sheets,getSheetByName:n=>sheets.find(s=>s.name===n),insertSheet(n){const s=new Sheet(n);sheets.push(s);return s;},setSpreadsheetTimeZone(z){this.zone=z;},getSpreadsheetTimeZone(){return this.zone;},setSpreadsheetLocale(l){this.locale=l;}};
   function builder(){const b={build:()=>({}),requireCheckbox:()=>b,requireValueInList:()=>b,requireNumberBetween:()=>b,setAllowInvalid:()=>b,whenTextEqualTo:()=>b,setBackground:()=>b,setRanges:()=>b};return b;}
   const ctx=vm.createContext({Date:ClockDate,console,
-    Utilities:{formatDate(d,z,pattern){const value=new Intl.DateTimeFormat('en-CA',{timeZone:z,year:'numeric',month:'2-digit',day:'2-digit'}).format(d);return pattern==='yyyy-MM-dd'?value:value+' 16:00:00';}},
+    Utilities:{getUuid:()=>require('node:crypto').randomUUID(),computeHmacSha256Signature:(value,key)=>[...require('node:crypto').createHmac('sha256',key).update(value).digest()],base64Encode:bytes=>Buffer.from(bytes).toString('base64'),formatDate(d,z,pattern){const value=new Intl.DateTimeFormat('en-CA',{timeZone:z,year:'numeric',month:'2-digit',day:'2-digit'}).format(d);return pattern==='yyyy-MM-dd'?value:value+' 16:00:00';}},
     Session:{getEffectiveUser:()=>user(owner)},
     PropertiesService:{getScriptProperties:()=>({getProperty:k=>properties[k],setProperty(k,v){properties[k]=v;}})},
     LockService:{getScriptLock:()=>({waitLock(){},releaseLock(){}})},
@@ -50,7 +51,7 @@ function googleAdapter() {
     SpreadsheetApp:{ProtectionType:{SHEET:'SHEET',RANGE:'RANGE'},getActiveSpreadsheet:()=>ss,openById(id){if(id!=='test-sheet')throw Error('Unknown Sheet');return ss;},flush(){flushes++;},newDataValidation:builder,newConditionalFormatRule:builder},
     ScriptApp:{getProjectTriggers:()=>triggers,deleteTrigger(t){triggers.splice(triggers.indexOf(t),1);},newTrigger(handler){const t={handler,getHandlerFunction:()=>handler};const b={timeBased:()=>b,everyMinutes(m){t.minutes=m;return b;},forSpreadsheet:()=>b,onEdit:()=>b,create(){triggers.push(t);return t;}};return b;}}
   });
-  for(const file of ['Engine.gs','Code.gs','Diagnostics.gs'])vm.runInContext(fs.readFileSync('src/'+file,'utf8'),ctx,{filename:file});
+  for(const file of ['Engine.gs','Code.gs','Diagnostics.gs','Assistant.gs','Leave.gs'])vm.runInContext(fs.readFileSync('src/'+file,'utf8'),ctx,{filename:file});
   function userEdit(row,column,value,email){
     const s=ss.getSheetByName('Workboard');
     if(email!==owner){

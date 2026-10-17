@@ -4,3 +4,10 @@ node_modules/
 .build-deps/
 release/
 __pycache__/
+tmp/
+private/
+
+submission/INTERVIEW_PREPARATION.md
+
+*.inspect.ndjson
+evidence/FAILED_VERIFICATION.txt

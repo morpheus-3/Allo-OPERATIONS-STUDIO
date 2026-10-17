@@ -1,0 +1,332 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Paid leave · Allo</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f6f5f0;color:#20383d;font:14px/1.6 'Segoe UI',Arial,sans-serif}main{max-width:1100px;margin:auto;padding:28px}h1{font:36px Georgia,serif;margin:12px 0}h2{font-size:17px}a{color:#245e52}button,input,select{font:inherit;border:1px solid #c7d5cb;border-radius:8px;padding:10px;background:#fff;color:#20383d}button{cursor:pointer}button.primary{background:#19383a;color:white}button:disabled{opacity:.5;cursor:wait}:focus-visible{outline:3px solid #6d967d;outline-offset:2px}.mode{background:#e7efdf;border-radius:8px;padding:10px 14px}.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:20px 0}.toolbar input{width:100px}.layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}.panel{background:white;border:1px solid #dfe5dc;border-radius:14px;padding:22px;margin-bottom:20px}.field{display:block;margin:14px 0}.field input{display:block;width:100%;margin-top:5px}.muted,small{color:#526a64;font-size:12px}.balance{padding:13px 0;border-bottom:1px solid #e1e7df;overflow-wrap:anywhere}.balance strong{font-size:25px}.request{padding:18px 0;border-bottom:1px solid #e1e7df;overflow-wrap:anywhere}.request h3{font-size:14px;margin:4px 0}.request p{margin:5px 0}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.badge{display:inline-block;border-radius:5px;padding:3px 8px;background:#edf1e8;font-size:11px;font-weight:600}#leave-message{white-space:pre-wrap;overflow-wrap:anywhere;margin:12px 0;color:#664c2f}#leave-demo-role{max-width:100%}@media(max-width:650px){main{padding:18px}.layout{grid-template-columns:1fr;gap:0}h1{font-size:29px}.panel{padding:17px}.toolbar{align-items:flex-start;flex-direction:column}}body.live main{padding:14px}body.live #leave-back,body.live #leave-demo-label{display:none}
+</style></head><body><main><a id="leave-back" href="demo.html">← Operations workspace</a><h1>Paid leave</h1><p>Plan time away. Keep approvals and balances visible.</p><div id="leave-mode" class="mode">Website demonstration · no live Sheet connection</div><div class="toolbar"><label id="leave-demo-label">Demo identity <select id="leave-demo-role" onchange="refreshLeave()"></select></label><label>Balance year <input id="leave-year" type="number" min="2000" max="2100" onchange="refreshLeave()"></label><button onclick="refreshLeave()">Refresh records</button></div><p id="leave-message" role="status" aria-live="polite"></p><div class="layout"><section><div class="panel"><h2>Annual balance</h2><p id="leave-policy" class="muted"></p><div id="leave-balances"></div></div><div class="panel"><h2>Request time off</h2><p class="muted">Full working days only. Dates are inclusive. Do not enter sensitive medical or personal details.</p><form onsubmit="event.preventDefault();submitLeaveForm()"><label class="field">First day<input id="leave-start" type="date" required></label><label class="field">Last day<input id="leave-end" type="date" required></label><button class="primary" type="submit">Submit request</button></form><p class="muted">Managers approve requests; employee submission never marks leave approved. Approved future leave reserves balance. Pending requests do not reserve it.</p></div></section><section class="panel"><h2>Requests & decisions</h2><p class="muted">Shared Sheet editors can see the leave ledger. This view limits employee responses to their own account.</p><div id="leave-requests"></div></section></div></main><script>const Utilities={formatDate:(d,zone,pattern)=>new Intl.DateTimeFormat('en-CA',{timeZone:zone||'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(d)+(pattern==='yyyy-MM-dd HH:mm'?' '+new Intl.DateTimeFormat('en-GB',{timeZone:zone||'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:false}).format(d):'')};
+/* Pure rules shared by Apps Script and the automated tests. All dates use the
+   configured project timezone (Asia/Kolkata). Intervals are calendar days. */
+function dayKey(d) {
+  return Utilities.formatDate(new Date(d), 'Asia/Kolkata', 'yyyy-MM-dd');
+}
+function dateAt(day, hour) { return new Date(day + 'T' + String(hour).padStart(2, '0') + ':00:00+05:30'); }
+function addDays(day, days) {
+  return dayKey(new Date(dateAt(day, 12).getTime() + days * 86400000));
+}
+function calendarFor(cfg) {
+  cfg=cfg||{};
+  const raw=String(cfg.WorkingDays===undefined?'1,2,3,4,5':cfg.WorkingDays).trim();
+  if(raw.split(',').some(v=>! /^[0-6]$/.test(v.trim())))throw Error('WorkingDays must contain weekday numbers 0-6 without empty entries.');
+  const days=raw.split(',').map(v=>Number(v.trim()));
+  if(!raw || days.some(n=>!Number.isInteger(n)||n<0||n>6) || new Set(days).size!==days.length)throw Error('WorkingDays must contain unique weekday numbers 0-6 (Sunday=0).');
+  const holidays=String(cfg.HolidayDates||'').split(',').map(v=>v.trim()).filter(Boolean);
+  holidays.forEach(d=>{if(!validDay(d))throw Error('HolidayDates must contain real YYYY-MM-DD dates.');});
+  return {days,holidays};
+}
+function validDay(day) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(String(day)) && Number.isFinite(dateAt(day,12).getTime()) && dayKey(dateAt(day,12))===day;
+}
+function workingDay(day,calendar) {
+  calendar=calendar||calendarFor();
+  return calendar.days.includes(new Date(dateAt(day,12).getTime()+19800000).getUTCDay())&&!calendar.holidays.includes(day);
+}
+function firstDay(day, daily,calendar) {
+  let attempts=0;
+  while (daily && !workingDay(day,calendar)) {if(++attempts>3660)throw Error('No working day found within ten years.');day=addDays(day,1);}
+  return day;
+}
+function nextSchedule(task,completedAt,previousDue,calendar) {
+  const working=(task.CalendarPolicy||(task.ProofType==='DAILY'?'WORKING':'CALENDAR'))==='WORKING';
+  const fixed=(task.RecurrenceMode||'COMPLETION')==='FIXED';
+  let day=addDays(dayKey(fixed&&previousDue?previousDue:completedAt),Number(task.IntervalDays));const skipped=new Set();
+  let due=dateAt(firstDay(day,working,calendar),Number(task.DueHour));
+  // Fixed schedules retain their raw calendar anchor even when a due date moves for a holiday.
+  if(fixed) {
+    const anchor=task.StartDate instanceof Date?dayKey(task.StartDate):String(task.StartDate||dayKey(previousDue||completedAt));
+    const interval=Number(task.IntervalDays);
+    let n=Math.max(1,Math.floor((dateAt(dayKey(previousDue||completedAt),12)-dateAt(anchor,12))/86400000/interval)+1);
+    while(true) {
+      if(n>100000)throw Error('Fixed recurrence exceeds supported horizon.');
+      day=addDays(anchor,n*interval);due=dateAt(firstDay(day,working,calendar),Number(task.DueHour));
+      if(due>new Date(completedAt))break;
+      if(!previousDue||due>new Date(previousDue))skipped.add(dayKey(due));n++;
+    }
+  }
+  return {due,skipped:skipped.size};
+}
+function nextDue(task, completedAt,previousDue,calendar) {
+  return nextSchedule(task,completedAt,previousDue,calendar).due;
+}
+function cycleFor(task, due) {
+  return { CycleID: task.TaskID + ':' + dayKey(due), TaskID: task.TaskID,
+    Task: task.Task, Employee: task.Employee, EmployeeEmail: String(task.EmployeeEmail).trim().toLowerCase(),
+    DueAt: due, ProofType: task.ProofType, Proof: '', Complete: false,
+    CompletedBy: '', CompletedAt: '', Status: 'Upcoming',
+    ManagerAlertAt: '', Acknowledge: false, AcknowledgedBy: '', AcknowledgedAt: '',
+    ManagerNote: '', LeadershipAlertAt: '', Error: '',
+    Blocker:'',RecoveryOwner:'',RecoveryTargetAt:'',NextAction:'',ResolutionNote:'',SaveRecovery:false,
+    ReviewOwnerEmail:'',RecoveryRevision:0,RecurrenceMode:task.RecurrenceMode||'COMPLETION',
+    CalendarPolicy:task.CalendarPolicy||(task.ProofType==='DAILY'?'WORKING':'CALENDAR'),SkippedOccurrences:0 };
+}
+function statusFor(c, now) {
+  if (c.CompletedAt) return 'Completed';
+  if (new Date(c.DueAt) <= now) return 'Overdue';
+  return dayKey(c.DueAt) <= dayKey(now) ? 'Due today' : 'Upcoming';
+}
+function alertFor(c, now, ackHours, resolveHours) {
+  if (!c.ManagerAlertAt) return !c.CompletedAt && now >= new Date(c.DueAt) ? 'MANAGER' : '';
+  if (c.LeadershipAlertAt) return '';
+  const hours = (now - new Date(c.ManagerAlertAt)) / 3600000;
+  if ((!c.AcknowledgedAt && hours >= ackHours) || (!c.CompletedAt && hours >= resolveHours)) return 'LEADERSHIP';
+  return '';
+}
+function completionError(c) {
+  if (c.ProofType === 'TICKET' && !String(c.Proof).trim()) return 'Enter a Ticket ID before checking Complete.';
+  if (String(c.Proof).length > 2000) return 'Keep completion proof under 2,000 characters.';
+  return '';
+}
+function validEmail(value) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim()); }
+function isSampleEmail(value) { return /@example\.(com|org|net)$/i.test(String(value || '').trim()); }
+function validateTask(task) {
+  if(task.RecurrenceMode && !['COMPLETION','FIXED'].includes(task.RecurrenceMode))throw Error('RecurrenceMode must be COMPLETION or FIXED.');
+  if(task.CalendarPolicy && !['CALENDAR','WORKING'].includes(task.CalendarPolicy))throw Error('CalendarPolicy must be CALENDAR or WORKING.');
+  if (!/^[A-Za-z0-9_-]{1,60}$/.test(String(task.TaskID))) throw new Error('TaskID must be a stable, unique ID using letters, numbers, _ or -: '+task.TaskID);
+  if (!String(task.Task || '').trim() || !String(task.Employee || '').trim() || !validEmail(task.EmployeeEmail)) throw new Error('Task name, employee and valid employee email required: '+task.TaskID);
+  if (![1,7,15,30].includes(Number(task.IntervalDays)) || !['DAILY','TICKET'].includes(task.ProofType)) throw new Error('Invalid recurrence or proof type: '+task.TaskID);
+  if (task.ProofType === 'DAILY' && Number(task.IntervalDays) !== 1) throw new Error('DAILY tasks require IntervalDays = 1: '+task.TaskID);
+  if (task.DueHour === '' || !Number.isInteger(Number(task.DueHour)) || Number(task.DueHour)<0 || Number(task.DueHour)>23) throw new Error('DueHour must be an integer 0–23: '+task.TaskID);
+  const day=task.StartDate instanceof Date ? dayKey(task.StartDate) : String(task.StartDate);
+  const parsed=dateAt(day,12);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !Number.isFinite(parsed.getTime()) || dayKey(parsed)!==day) throw new Error('StartDate must be a real YYYY-MM-DD date: '+task.TaskID);
+}
+function validateSettings(cfg) {
+  calendarFor(cfg);
+  const backup=String(cfg.BackupManagerEmail||'').trim();
+  const start=String(cfg.ManagerLeaveStart||'').trim(),end=String(cfg.ManagerLeaveEnd||'').trim();
+  if(backup && (!validEmail(backup)||backup.toLowerCase()===String(cfg.ManagerEmail).toLowerCase()))throw Error('BackupManagerEmail must be a different valid account.');
+  if(start||end) {
+    if(!backup||!validDay(start)||!validDay(end)||end<start)throw Error('Leave coverage requires a backup and valid inclusive start/end dates.');
+  }
+  if (!['true','false'].includes(String(cfg.DryRun).toLowerCase())) throw new Error('DryRun must be TRUE or FALSE; invalid values never enable sending.');
+  if (!Number.isFinite(Number(cfg.AckHours)) || !Number.isFinite(Number(cfg.ResolveHours)) || !(Number(cfg.AckHours)>0) || !(Number(cfg.ResolveHours)>=Number(cfg.AckHours))) throw new Error('SLA must use finite positive hours; ResolveHours must be at least AckHours.');
+  if (!validEmail(cfg.ManagerEmail) || !validEmail(cfg.LeadershipEmail)) throw new Error('Valid manager and leadership email addresses required.');
+  if (String(cfg.DryRun).toLowerCase()==='false' && [cfg.ManagerEmail,cfg.LeadershipEmail,backup].filter(Boolean).some(isSampleEmail)) throw new Error('Replace sample recipients before enabling live email.');
+}
+function activeManager(cfg,now) {
+  const day=dayKey(now);
+  return String(cfg.BackupManagerEmail&&cfg.ManagerLeaveStart&&cfg.ManagerLeaveEnd&&day>=cfg.ManagerLeaveStart&&day<=cfg.ManagerLeaveEnd?cfg.BackupManagerEmail:cfg.ManagerEmail).trim().toLowerCase();
+}
+function reviewerEmails(c,cfg,now) {
+  return [...new Set([String(cfg.ManagerEmail).trim().toLowerCase(),activeManager(cfg,now),String(c.ReviewOwnerEmail||'').trim().toLowerCase()].filter(Boolean))];
+}
+function recoveryError(c) {
+  if(!String(c.Blocker||'').trim()||!String(c.RecoveryOwner||'').trim()||!String(c.NextAction||'').trim())return 'Enter blocker, recovery owner and next action.';
+  if(!c.RecoveryTargetAt||!Number.isFinite(new Date(c.RecoveryTargetAt).getTime()))return 'Enter a valid recovery target date and time.';
+  if(c.ResolutionNote&&!c.CompletedAt)return 'Employee completion is required before recording a resolution note.';
+  if(['Blocker','RecoveryOwner','NextAction','ResolutionNote'].some(k=>String(c[k]||'').length>2000))return 'Keep recovery fields under 2,000 characters.';
+  return '';
+}
+function weeklySummary(cycles,history,now,ackHours,weekStart) {
+  const today=dayKey(now),weekday=new Date(dateAt(today,12).getTime()+19800000).getUTCDay();
+  const start=weekStart||addDays(today,-((weekday+6)%7)),end=addDays(start,7),asOf=new Date(now);
+  const from=dateAt(start,0),until=new Date(Math.min(+dateAt(end,0),+asOf));
+  // A live snapshot includes events at now; a completed week excludes next Monday.
+  const beforeCutoff=value=>+new Date(value)<+until||(+until<+dateAt(end,0)&&+new Date(value)===+until);
+  if(until<=from)return {start,end,asOf:until,dueCount:0,onTimeCount:0,onTimeRate:null,reviewCount:0,compliantReviewCount:0,reviewRate:null,carryover:0,overdue:0,ageBuckets:[0,0,0],skippedOccurrences:0,blockers:[]};
+  const due=cycles.filter(c=>new Date(c.DueAt)>=from&&beforeCutoff(c.DueAt));
+  const ontime=due.filter(c=>c.CompletedAt&&new Date(c.CompletedAt)<=new Date(c.DueAt)).length;
+  const reviews=cycles.filter(c=>c.ManagerAlertAt&&(+new Date(c.ManagerAlertAt)+Number(ackHours)*3600000)>=+from&&beforeCutoff(+new Date(c.ManagerAlertAt)+Number(ackHours)*3600000));
+  const compliant=reviews.filter(c=>c.AcknowledgedAt&&(+new Date(c.AcknowledgedAt)-new Date(c.ManagerAlertAt))<=Number(ackHours)*3600000).length;
+  const openAt=c=>beforeCutoff(c.DueAt)&&(!c.CompletedAt||!beforeCutoff(c.CompletedAt));
+  const carryover=cycles.filter(c=>new Date(c.DueAt)<from&&openAt(c));
+  const overdue=cycles.filter(openAt).map(c=>({cycle:c,ageHours:(until-new Date(c.DueAt))/3600000}));
+  const latest=new Map();
+  (history||[]).filter(h=>beforeCutoff(h.UpdatedAt)).sort((a,b)=>new Date(a.UpdatedAt)-new Date(b.UpdatedAt)).forEach(h=>latest.set(h.CycleID,h));
+  const blockers={};
+  overdue.forEach(({cycle:c})=>{const h=latest.get(c.CycleID);const label=String(h?h.Blocker:'Unclassified').trim()||'Unclassified';(blockers[label]||(blockers[label]={count:0,actions:new Set()})).count++;if(h&&h.NextAction)blockers[label].actions.add(String(h.NextAction));});
+  return {start,end,asOf:until,dueCount:due.length,onTimeCount:ontime,onTimeRate:due.length?ontime/due.length:null,
+    reviewCount:reviews.length,compliantReviewCount:compliant,reviewRate:reviews.length?compliant/reviews.length:null,
+    carryover:carryover.length,overdue:overdue.length,ageBuckets:[overdue.filter(x=>x.ageHours<24).length,overdue.filter(x=>x.ageHours>=24&&x.ageHours<72).length,overdue.filter(x=>x.ageHours>=72).length],
+    skippedOccurrences:due.reduce((sum,c)=>sum+Number(c.SkippedOccurrences||0),0),
+    blockers:Object.entries(blockers).map(([label,v])=>({label,count:v.count,actions:[...v.actions]})).sort((a,b)=>b.count-a.count)};
+}
+
+// Calendar-year paid leave, one entitlement per unique employee email.
+function leaveDays(start,end,cfg) {
+  if(!validDay(start)||!validDay(end)||end<start)throw Error('Enter a valid inclusive date range.');
+  if(start.slice(0,4)!==end.slice(0,4))throw Error('Split requests at the calendar-year boundary.');
+  const cal=calendarFor(cfg);let count=0;
+  for(let day=start;day<=end;day=addDays(day,1))if(workingDay(day,cal))count++;
+  if(!count)throw Error('The request contains no configured working days.');
+  return count;
+}
+function leaveEntitlement(cfg){const days=cfg.AnnualPaidLeaveDays===undefined?50:Number(cfg.AnnualPaidLeaveDays);if(!Number.isInteger(days)||days<0||days>366)throw Error('AnnualPaidLeaveDays must be an integer from 0 to 366.');return days;}
+function leaveBalance(rows,email,year,cfg) {
+  const own=rows.filter(r=>String(r.EmployeeEmail).toLowerCase()===email.toLowerCase()&&Number(r.Year)===Number(year));
+  const approved=own.filter(r=>r.Status==='APPROVED').reduce((n,r)=>n+Number(r.Days),0),pending=own.filter(r=>r.Status==='PENDING').reduce((n,r)=>n+Number(r.Days),0);
+  const entitlement=leaveEntitlement(cfg);return {year:Number(year),entitlement,approved,pending,remaining:entitlement-approved};
+}
+function leaveCreate(rows,input,actor,tasks,cfg,now) {
+  const email=String(actor||'').toLowerCase();
+  if(!email||!tasks.some(t=>String(t.EmployeeEmail).toLowerCase()===email&&t.Active!==false))throw Error('Only an identified assigned employee may request leave.');
+  if(!/^LR-[a-zA-Z0-9-]{8,80}$/.test(String(input.RequestID)))throw Error('Invalid request reference.');
+  const existing=rows.find(r=>r.RequestID===input.RequestID);
+  if(existing){if(existing.EmployeeEmail!==email||existing.StartDate!==input.StartDate||existing.EndDate!==input.EndDate)throw Error('Request reference already used.');return existing;}
+  const days=leaveDays(input.StartDate,input.EndDate,cfg);
+  if(input.StartDate<dayKey(now))throw Error('Requests cannot start in the past.');
+  if(rows.some(r=>r.EmployeeEmail===email&&['PENDING','APPROVED'].includes(r.Status)&&r.StartDate<=input.EndDate&&r.EndDate>=input.StartDate))throw Error('Dates overlap an existing pending or approved request.');
+  const year=Number(input.StartDate.slice(0,4));
+  if(days>leaveBalance(rows,email,year,cfg).remaining)throw Error('Insufficient annual paid-leave balance.');
+  return {RequestID:input.RequestID,EmployeeEmail:email,StartDate:input.StartDate,EndDate:input.EndDate,Days:days,Year:year,Status:'PENDING',RequestedAt:new Date(now).toISOString(),DecidedBy:'',DecidedAt:'',DecisionNote:''};
+}
+function leaveDecision(rows,id,action,actor,cfg,now,note) {
+  const r=rows.find(r=>r.RequestID===id);if(!r)throw Error('Leave request not found.');
+  const email=String(actor||'').toLowerCase(),manager=[cfg.ManagerEmail,activeManager(cfg,now)].some(v=>String(v||'').toLowerCase()===email);
+  if(!email)throw Error('Caller identity is unavailable.');
+  if(!['APPROVED','REJECTED','CANCELLED'].includes(action))throw Error('Unsupported leave decision.');
+  if(action==='CANCELLED'){
+    if(!manager&&!(r.EmployeeEmail===email&&r.Status==='PENDING'))throw Error('Only managers may cancel approved leave; employees may withdraw their pending requests.');
+    if(r.Status==='APPROVED'&&r.StartDate<=dayKey(now))throw Error('Approved leave cannot be cancelled once its start date is reached.');
+  }else{
+    if(!manager)throw Error('Only the primary manager or active approved backup may decide leave.');
+    if(r.EmployeeEmail===email)throw Error('Self-approval and self-review are not permitted.');
+  }
+  if(r.Status===action)return r;
+  if(r.Status!=='PENDING'&&!(action==='CANCELLED'&&r.Status==='APPROVED'))throw Error('This request already has a final decision.');
+  if(action==='APPROVED'&&Number(r.Days)>leaveBalance(rows,r.EmployeeEmail,r.Year,cfg).remaining)throw Error('Insufficient annual balance at approval time.');
+  const comment=String(note||'').trim();if(comment.length>500)throw Error('Decision note exceeds 500 characters.');
+  if(['REJECTED','CANCELLED'].includes(action)&&!comment)throw Error('Add a short decision note.');
+  return {...r,Status:action,DecidedBy:email,DecidedAt:new Date(now).toISOString(),DecisionNote:comment};
+}
+function leaveIdentity_(){const email=String(Session.getActiveUser().getEmail()||'').toLowerCase();if(!email)throw Error('Sign in with an identifiable Google account.');return email;}
+function leaveRead_(){
+  const decisions=new Map();records('LeaveLog').filter(e=>['APPROVED','REJECTED','CANCELLED'].includes(e.Action)).forEach(entry=>decisions.set(entry.RequestID,entry));
+  return records('LeaveRequests').map(r=>{
+    const entry=decisions.get(r.RequestID);
+    return {...r,StartDate:r.StartDate instanceof Date?dayKey(r.StartDate):String(r.StartDate),EndDate:r.EndDate instanceof Date?dayKey(r.EndDate):String(r.EndDate),RequestedAt:r.RequestedAt?new Date(r.RequestedAt).toISOString():'',DecidedAt:r.DecidedAt?new Date(r.DecidedAt).toISOString():'',...(entry?{Status:entry.Action,DecidedBy:entry.Actor,DecidedAt:new Date(entry.At).toISOString(),DecisionNote:entry.Note}:{})};
+  });
+}
+function getLeaveOverview(year) {
+  const actor=leaveIdentity_(),cfg=settings(),tasks=records('Tasks'),now=new Date();
+  const manager=[cfg.ManagerEmail,activeManager(cfg,now)].some(e=>String(e||'').toLowerCase()===actor);
+  const employees=[...new Set(tasks.filter(t=>t.Active!==false).map(t=>String(t.EmployeeEmail).toLowerCase()))];
+  if(!manager&&!employees.includes(actor))throw Error('No authorized leave role for this account.');
+  const selected=Number(year||dayKey(now).slice(0,4));if(!Number.isInteger(selected)||selected<2000||selected>2100)throw Error('Invalid balance year.');
+  const rows=leaveRead_(),receipts=records('LeaveLog'),commands=records('LeaveQueue').map(verifyLeaveCommand_).filter(c=>c&&(manager||c.actor===actor));
+  const pending=commands.filter(c=>!receipts.some(r=>r.EntryID==='QUEUE:'+c.QueueID)).length;
+  const errors=commands.map(c=>receipts.find(r=>r.EntryID==='QUEUE:'+c.QueueID&&r.Action==='ERROR')).filter(Boolean);
+  return {mode:'live',actor,manager,today:dayKey(now),year:selected,balances:(manager?employees:[actor]).map(email=>({email,...leaveBalance(rows,email,selected,cfg)})),requests:rows.filter(r=>Number(r.Year)===selected&&(manager||r.EmployeeEmail===actor)),notice:pending+' command(s) awaiting owner automation (normally up to five minutes).'+(errors.length?' Latest processing error: '+errors[errors.length-1].Note:''),policy:'Calendar year; full working days only; no carryover. Approved future leave reserves balance. Pending leave does not reserve balance.'};
+}
+function submitLeaveRequest(input) {
+  const actor=leaveIdentity_();leaveCreate(leaveRead_(),input,actor,records('Tasks'),settings(),new Date());
+  return enqueueLeave_('SUBMIT',input,actor,input.StartDate.slice(0,4));
+}
+function decideLeaveRequest(id,action,note) {
+  const actor=leaveIdentity_(),r=leaveDecision(leaveRead_(),id,action,actor,settings(),new Date(),note);
+  return enqueueLeave_('DECIDE',{id,action,note},actor,r.Year);
+}
+function applyLeaveSubmission_(input,actor) {
+  const rows=leaveRead_(),r=leaveCreate(rows,input,actor,records('Tasks'),settings(),new Date());if(!rows.some(x=>x.RequestID===r.RequestID))save('LeaveRequests',r);return r;
+}
+function applyLeaveDecision_(id,action,note,actor) {
+    const rows=leaveRead_(),before=rows.find(r=>r.RequestID===id),r=leaveDecision(rows,id,action,actor,settings(),new Date(),note);
+    if(before.Status!==r.Status){
+      // Durable decision entry first. Retry reconciles the request after a failed write.
+      const key=id+':'+action,entry=records('LeaveLog').find(x=>x.EntryID===key);
+      if(entry){Object.assign(r,{DecidedBy:entry.Actor,DecidedAt:entry.At,DecisionNote:entry.Note});}
+      else save('LeaveLog',{EntryID:key,RequestID:id,Action:action,Actor:actor,At:r.DecidedAt,Note:r.DecisionNote});
+    }
+    save('LeaveRequests',r);
+    return r;
+}
+function openLeave(){leaveIdentity_();SpreadsheetApp.getUi().showSidebar(HtmlService.createHtmlOutputFromFile('Leave').setTitle('Paid leave'));}
+function ensureLeaveQueue_(){const props=PropertiesService.getScriptProperties();if(!props.getProperty('LEAVE_QUEUE_SECRET'))props.setProperty('LEAVE_QUEUE_SECRET',Utilities.getUuid()+Utilities.getUuid());}
+function signLeaveCommand_(payload){const secret=PropertiesService.getScriptProperties().getProperty('LEAVE_QUEUE_SECRET');if(!secret)throw Error('Owner must run updated setup before using paid leave.');return Utilities.base64Encode(Utilities.computeHmacSha256Signature(payload,secret));}
+function verifyLeaveCommand_(row){try{if(String(row.Payload).length>8000||signLeaveCommand_(String(row.Payload))!==row.Signature)return null;const command=JSON.parse(row.Payload);return command.QueueID===row.QueueID?command:null;}catch(e){return null;}}
+function enqueueLeave_(kind,args,actor,year){
+  const QueueID=kind==='SUBMIT'?'SUBMIT:'+args.RequestID:'DECIDE:'+args.id+':'+args.action+':'+Utilities.getUuid();
+  const existing=records('LeaveQueue').find(r=>r.QueueID===QueueID),verified=existing&&verifyLeaveCommand_(existing);
+  if(verified){if(verified.actor!==actor)throw Error('Command already belongs to another account.');return getLeaveOverview(year);}
+  const Payload=JSON.stringify({QueueID,kind,args,actor,at:new Date().toISOString()});
+  // This shared staging sheet is the only ledger-related sheet callers can write.
+  // The owner timer trusts signed payloads only, never editable queue cells alone.
+  save('LeaveQueue',{QueueID,Payload,Signature:signLeaveCommand_(Payload)});
+  return getLeaveOverview(year);
+}
+function processLeaveQueue_(){
+  requireOwner();
+  records('LeaveQueue').forEach(row=>{
+    const c=verifyLeaveCommand_(row);if(!c||records('LeaveLog').some(r=>r.EntryID==='QUEUE:'+c.QueueID))return;
+    try{
+      if(c.kind==='SUBMIT')applyLeaveSubmission_(c.args,c.actor);
+      else if(c.kind==='DECIDE')applyLeaveDecision_(c.args.id,c.args.action,c.args.note,c.actor);
+      else throw Error('Unknown leave command.');
+      save('LeaveLog',{EntryID:'QUEUE:'+c.QueueID,RequestID:c.args.RequestID||c.args.id,Action:'APPLIED',Actor:c.actor,At:new Date().toISOString(),Note:''});
+    }catch(error){
+      // Write interruptions stay pending for safe retry; validation errors get a receipt.
+      if(/interrupted|Service|quota|timed out/i.test(String(error)))return;
+      save('LeaveLog',{EntryID:'QUEUE:'+c.QueueID,RequestID:c.args.RequestID||c.args.id,Action:'ERROR',Actor:c.actor,At:new Date().toISOString(),Note:String(error.message||error).slice(0,500)});
+    }
+  });
+}
+
+const leaveElement=id=>document.getElementById(id);
+const leaveLive=typeof google!=='undefined'&&google.script&&google.script.run;
+let leaveBusy=false,leaveView,leaveKeys={};
+function leaveNode(tag,text,parent,className){const n=document.createElement(tag);n.textContent=text;if(className)n.className=className;if(parent)parent.appendChild(n);return n;}
+function leaveDemoContext(){
+  const main=JSON.parse(localStorage.getItem('allo-studio-v2')||'null');
+  if(!main)throw Error('Open the operations workspace first to initialize its demo records.');
+  return {...main,requests:JSON.parse(localStorage.getItem('allo-leave-v1')||'[]')};
+}
+function leaveCall(method,args,success){
+  if(leaveBusy)return;leaveBusy=true;document.querySelectorAll('button').forEach(b=>b.disabled=true);leaveElement('leave-message').textContent='Checking records…';
+  const finish=()=>{leaveBusy=false;document.querySelectorAll('button').forEach(b=>b.disabled=false);};
+  const done=result=>{finish();success(result);};
+  const fail=error=>{finish();leaveElement('leave-message').textContent=String(error.message||error);};
+  if(leaveLive){google.script.run.withSuccessHandler(done).withFailureHandler(fail)[method](...args);return;}
+  try{
+    const data=leaveDemoContext(),actor=leaveElement('leave-demo-role').value,cfg=data.settingsState,now=new Date(data.now);
+    let rows=data.requests;
+    if(method==='submitLeaveRequest'){
+      const r=leaveCreate(rows,args[0],actor,data.tasks,cfg,now);if(!rows.some(x=>x.RequestID===r.RequestID))rows.push(r);
+    }else if(method==='decideLeaveRequest'){
+      const r=leaveDecision(rows,args[0],args[1],actor,cfg,now,args[2]);rows=rows.map(x=>x.RequestID===r.RequestID?r:x);
+    }
+    localStorage.setItem('allo-leave-v1',JSON.stringify(rows));
+    const year=Number(leaveElement('leave-year').value),manager=[cfg.ManagerEmail,activeManager(cfg,now)].includes(actor);
+    const emails=[...new Set(data.tasks.map(t=>t.EmployeeEmail))];
+    if(!manager&&!emails.includes(actor))throw Error('No authorized demo role.');
+    done({mode:'demo',actor,manager,today:dayKey(now),year,balances:(manager?emails:[actor]).map(email=>({email,...leaveBalance(rows,email,year,cfg)})),requests:rows.filter(r=>Number(r.Year)===year&&(manager||r.EmployeeEmail===actor)),policy:'50 days by default per unique email and calendar year. Full working days; configured holidays excluded. No carryover or half-days.'});
+  }catch(e){fail(e);}
+}
+function renderLeave(view){
+  leaveView=view;leaveElement('leave-year').value=view.year;leaveElement('leave-mode').textContent=(view.mode==='live'?'Google Sheets · ':'Website demo · ')+view.actor+' · as of '+view.today+' IST';
+  leaveElement('leave-policy').textContent=view.policy;leaveElement('leave-start').min=view.today;leaveElement('leave-end').min=view.today;
+  const balances=leaveElement('leave-balances');balances.replaceChildren();
+  view.balances.forEach(b=>{const row=leaveNode('div','',balances,'balance');leaveNode('b',b.email,row);leaveNode('p',b.remaining+' / '+b.entitlement+' days available',row);leaveNode('small',b.approved+' approved/reserved · '+b.pending+' pending',row);});
+  const list=leaveElement('leave-requests');list.replaceChildren();
+  if(!view.requests.length)leaveNode('p','No requests recorded for this year.',list,'muted');
+  view.requests.slice().reverse().forEach(r=>{
+    const row=leaveNode('article','',list,'request');leaveNode('span',r.Status,row,'badge');leaveNode('h3',r.EmployeeEmail,row);leaveNode('p',r.StartDate+' to '+r.EndDate+' · '+r.Days+' working day(s)',row);leaveNode('small',r.RequestID,row);
+    if(r.DecidedBy)leaveNode('p','Decision: '+r.DecidedBy+' · '+r.DecidedAt+(r.DecisionNote?' · '+r.DecisionNote:''),row,'muted');
+    const actions=leaveNode('div','',row,'actions');
+    const add=(label,status)=>{const b=leaveNode('button',label,actions);b.onclick=()=>decideLeaveForm(r.RequestID,status);};
+    if(view.manager&&r.Status==='PENDING'&&r.EmployeeEmail!==view.actor){add('Approve','APPROVED');add('Reject','REJECTED');}
+    if(r.Status==='PENDING'&&(view.manager||r.EmployeeEmail===view.actor)||view.manager&&r.Status==='APPROVED'&&r.StartDate>view.today)add('Cancel request','CANCELLED');
+  });
+  leaveElement('leave-message').textContent=view.notice||'Records loaded. No messages or emails are sent by leave actions.';
+}
+function refreshLeave(){leaveCall('getLeaveOverview',[Number(leaveElement('leave-year').value)],renderLeave);}
+function submitLeaveForm(){
+  const StartDate=leaveElement('leave-start').value,EndDate=leaveElement('leave-end').value,key=StartDate+':'+EndDate;
+  const RequestID=leaveKeys[key]||(leaveKeys[key]='LR-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2));
+  leaveCall('submitLeaveRequest',[{RequestID,StartDate,EndDate}],view=>{delete leaveKeys[key];leaveElement('leave-year').value=Number(StartDate.slice(0,4));if(view.year!==Number(StartDate.slice(0,4)))refreshLeave();else renderLeave(view);leaveElement('leave-message').textContent=view.mode==='live'?(view.notice||'Queued for owner automation. Refresh after processing.'):'Request submitted for review. It is not approved yet.';});
+}
+function decideLeaveForm(id,action){
+  const note=action==='APPROVED'?'':prompt('Short decision note (no sensitive details):');if(note===null)return;
+  leaveCall('decideLeaveRequest',[id,action,note],renderLeave);
+}
+try{
+  if(leaveLive){document.body.classList.add('live');leaveElement('leave-year').value=new Date().getFullYear();}
+  else{const data=leaveDemoContext(),select=leaveElement('leave-demo-role');[...new Set([...data.tasks.map(t=>t.EmployeeEmail),data.settingsState.ManagerEmail,data.settingsState.BackupManagerEmail].filter(Boolean))].forEach(email=>{const option=leaveNode('option',email,select);option.value=email;});leaveElement('leave-year').value=Number(dayKey(new Date(data.now)).slice(0,4));}
+  refreshLeave();
+}catch(e){leaveElement('leave-message').textContent=e.message;}
+</script></body></html>

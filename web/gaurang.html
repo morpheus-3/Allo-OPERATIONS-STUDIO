@@ -1,0 +1,8 @@
+<button class="gaurang-launch" id="gaurang-launch" onclick="toggleGaurang()" aria-expanded="false" aria-controls="gaurang-chat">✦ Ask Gaurang</button>
+<section class="gaurang-chat" id="gaurang-chat" aria-label="Gaurang operations assistant" hidden>
+  <header class="gaurang-head"><div><strong>✦ Gaurang</strong><p>Your operations assistant</p></div><button onclick="toggleGaurang()" aria-label="Close Gaurang">×</button></header>
+  <div class="gaurang-source" id="gaurang-mode">Demo records · no live Google Sheets connection</div>
+  <div class="gaurang-messages" id="gaurang-messages" role="log" aria-live="polite" aria-relevant="additions"><div class="gaurang-bubble">Hello, I’m Gaurang. Ask about tasks, manager leave coverage or this week’s report. I answer from recorded information and show my sources.<small>Read-only · no external AI service · include names in each question</small></div></div>
+  <div class="gaurang-suggestions"><button onclick="askGaurangChat('Which tasks are overdue?')">Overdue tasks</button><button onclick="askGaurangChat('Who covers manager leave?')">Leave coverage</button><button onclick="askGaurangChat('Show weekly report')">Weekly report</button></div>
+  <form onsubmit="event.preventDefault();askGaurangChat()"><label for="gaurang-question">Ask Gaurang</label><div class="gaurang-compose"><textarea id="gaurang-question" maxlength="1000" rows="2" placeholder="What needs my attention?" required></textarea><button id="gaurang-send" type="submit">Send</button></div><span id="gaurang-status" role="status"></span></form>
+</section>

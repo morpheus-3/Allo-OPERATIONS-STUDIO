@@ -1,190 +1,388 @@
 TAP version 13
-# Subtest: Sheets API adapter: setup is repeatable and builds all sheet/protection structures
-ok 1 - Sheets API adapter: setup is repeatable and builds all sheet/protection structures
+# Subtest: Google acceptance fixture has expected boundary populations and refuses unsafe copies
+ok 1 - Google acceptance fixture has expected boundary populations and refuses unsafe copies
   ---
-  duration_ms: 50.8223
+  duration_ms: 94.9126
+  type: 'test'
+  ...
+# Subtest: reviewer-facing demo distinguishes reported live evidence from outstanding checks
+ok 2 - reviewer-facing demo distinguishes reported live evidence from outstanding checks
+  ---
+  duration_ms: 2.8057
+  type: 'test'
+  ...
+# Subtest: confirmed candidate identity is present and contains no template placeholders
+ok 3 - confirmed candidate identity is present and contains no template placeholders
+  ---
+  duration_ms: 1.0321
+  type: 'test'
+  ...
+# Subtest: Gaurang uses current records with cycle citations and keeps acknowledgement separate
+ok 4 - Gaurang uses current records with cycle citations and keeps acknowledgement separate
+  ---
+  duration_ms: 45.5803
+  type: 'test'
+  ...
+# Subtest: Gaurang answers configured coverage and calendar but refuses invented employee leave
+ok 5 - Gaurang answers configured coverage and calendar but refuses invented employee leave
+  ---
+  duration_ms: 5.4799
+  type: 'test'
+  ...
+# Subtest: Gaurang weekly denominators and recurrence come from shared rules
+ok 6 - Gaurang weekly denominators and recurrence come from shared rules
+  ---
+  duration_ms: 6.165
+  type: 'test'
+  ...
+# Subtest: Gaurang uses saved recovery versions and never treats record instructions as executable
+ok 7 - Gaurang uses saved recovery versions and never treats record instructions as executable
+  ---
+  duration_ms: 7.6646
+  type: 'test'
+  ...
+# Subtest: Google Sheets Gaurang endpoint fails closed for missing and unauthorized identities
+ok 8 - Google Sheets Gaurang endpoint fails closed for missing and unauthorized identities
+  ---
+  duration_ms: 45.8279
+  type: 'test'
+  ...
+# Subtest: chat UI renders record text safely, prevents concurrent requests and recovers from failures
+ok 9 - chat UI renders record text safely, prevents concurrent requests and recovers from failures
+  ---
+  duration_ms: 2.1889
+  type: 'test'
+  ...
+# Subtest: health rejects missing, malformed, stale and implausibly future heartbeats
+ok 10 - health rejects missing, malformed, stale and implausibly future heartbeats
+  ---
+  duration_ms: 100.1128
+  type: 'test'
+  ...
+# Subtest: Sheets API adapter: setup is repeatable and builds all sheet/protection structures
+ok 11 - Sheets API adapter: setup is repeatable and builds all sheet/protection structures
+  ---
+  duration_ms: 36.5108
   type: 'test'
   ...
 # Subtest: employee completes using Sheets API adapter persistence, metadata locks and next cycle inherits protections
-ok 2 - employee completes using Sheets API adapter persistence, metadata locks and next cycle inherits protections
+ok 12 - employee completes using Sheets API adapter persistence, metadata locks and next cycle inherits protections
   ---
-  duration_ms: 14.8592
+  duration_ms: 21.9347
   type: 'test'
   ...
 # Subtest: protected ranges deny wrong employee, system metadata, unknown rows and wrong manager
-ok 3 - protected ranges deny wrong employee, system metadata, unknown rows and wrong manager
+ok 13 - protected ranges deny wrong employee, system metadata, unknown rows and wrong manager
   ---
-  duration_ms: 12.0108
+  duration_ms: 20.6216
   type: 'test'
   ...
 # Subtest: missing ticket resets checkbox without erasing typed evidence or manager note
-ok 4 - missing ticket resets checkbox without erasing typed evidence or manager note
+ok 14 - missing ticket resets checkbox without erasing typed evidence or manager note
   ---
-  duration_ms: 18.0153
+  duration_ms: 26.334
   type: 'test'
   ...
 # Subtest: dry-run manager alert, simulated manager edit, completion and review close escalation
-ok 5 - dry-run manager alert, simulated manager edit, completion and review close escalation
+ok 15 - dry-run manager alert, simulated manager edit, completion and review close escalation
   ---
-  duration_ms: 20.3552
+  duration_ms: 42.2474
   type: 'test'
   ...
 # Subtest: installing automation twice keeps one timer and one edit trigger; health reports mode
-ok 6 - installing automation twice keeps one timer and one edit trigger; health reports mode
+ok 16 - installing automation twice keeps one timer and one edit trigger; health reports mode
   ---
-  duration_ms: 13.9647
+  duration_ms: 23.41
   type: 'test'
   ...
 # Subtest: MailApp adapter simulates sending unique stages and catches up leadership without duplicates
-ok 7 - MailApp adapter simulates sending unique stages and catches up leadership without duplicates
+ok 17 - MailApp adapter simulates sending unique stages and catches up leadership without duplicates
   ---
-  duration_ms: 14.0708
+  duration_ms: 28.5468
   type: 'test'
   ...
 # Subtest: one failed delivery does not block other employee alerts
-ok 8 - one failed delivery does not block other employee alerts
+ok 18 - one failed delivery does not block other employee alerts
   ---
-  duration_ms: 11.2266
+  duration_ms: 30.9293
   type: 'test'
   ...
 # Subtest: proof-only edit never attributes an already queued completion to another action
-ok 9 - proof-only edit never attributes an already queued completion to another action
+ok 19 - proof-only edit never attributes an already queued completion to another action
   ---
-  duration_ms: 9.4773
+  duration_ms: 20.4781
   type: 'test'
   ...
 # Subtest: strict configuration rejects duplicate IDs and unsafe dry-run values before alerts
-ok 10 - strict configuration rejects duplicate IDs and unsafe dry-run values before alerts
+ok 20 - strict configuration rejects duplicate IDs and unsafe dry-run values before alerts
   ---
-  duration_ms: 13.9901
+  duration_ms: 16.7788
   type: 'test'
   ...
 # Subtest: empty rows with unchecked checkboxes do not become phantom tasks or cycles
-ok 11 - empty rows with unchecked checkboxes do not become phantom tasks or cycles
+ok 21 - empty rows with unchecked checkboxes do not become phantom tasks or cycles
   ---
-  duration_ms: 16.2346
+  duration_ms: 35.612
   type: 'test'
   ...
 # Subtest: partial task rows still fail validation instead of being silently discarded
-ok 12 - partial task rows still fail validation instead of being silently discarded
+ok 22 - partial task rows still fail validation instead of being silently discarded
   ---
-  duration_ms: 8.4622
+  duration_ms: 15.3447
   type: 'test'
   ...
 # Subtest: successful delivery recovery clears mail errors but preserves validation errors
-ok 13 - successful delivery recovery clears mail errors but preserves validation errors
+ok 23 - successful delivery recovery clears mail errors but preserves validation errors
   ---
-  duration_ms: 13.2313
+  duration_ms: 19.7714
   type: 'test'
   ...
 # Subtest: new cycles use the next logical row despite far-away FALSE placeholders
-ok 14 - new cycles use the next logical row despite far-away FALSE placeholders
+ok 24 - new cycles use the next logical row despite far-away FALSE placeholders
   ---
-  duration_ms: 73.2375
+  duration_ms: 92.2066
   type: 'test'
   ...
 # Subtest: compacting Workboard preserves cycle data and ledger with a protected backup
-ok 15 - compacting Workboard preserves cycle data and ledger with a protected backup
+ok 25 - compacting Workboard preserves cycle data and ledger with a protected backup
   ---
-  duration_ms: 23.198
+  duration_ms: 35.6502
+  type: 'test'
+  ...
+# Subtest: leave website supports employee submission, manager approval and refreshed balances from persisted records
+ok 26 - leave website supports employee submission, manager approval and refreshed balances from persisted records
+  ---
+  duration_ms: 35.1155
+  type: 'test'
+  ...
+# Subtest: leave counts configured working days, excludes holidays, and rejects year-spanning and empty requests
+ok 27 - leave counts configured working days, excludes holidays, and rejects year-spanning and empty requests
+  ---
+  duration_ms: 88.0913
+  type: 'test'
+  ...
+# Subtest: leave requests are own-account only, overlap checked and retries idempotent
+ok 28 - leave requests are own-account only, overlap checked and retries idempotent
+  ---
+  duration_ms: 39.4802
+  type: 'test'
+  ...
+# Subtest: manager approval reserves annual balance once, history retained, cancellation restores it
+ok 29 - manager approval reserves annual balance once, history retained, cancellation restores it
+  ---
+  duration_ms: 38.231
+  type: 'test'
+  ...
+# Subtest: approval rechecks remaining balance and rejects self-approval; pending does not reserve
+ok 30 - approval rechecks remaining balance and rejects self-approval; pending does not reserve
+  ---
+  duration_ms: 51.7447
+  type: 'test'
+  ...
+# Subtest: leave decision ledger protects balance after an interrupted request-row write
+ok 31 - leave decision ledger protects balance after an interrupted request-row write
+  ---
+  duration_ms: 31.9578
+  type: 'test'
+  ...
+# Subtest: employees see their own records and a shared email has one entitlement
+ok 32 - employees see their own records and a shared email has one entitlement
+  ---
+  duration_ms: 23.0697
+  type: 'test'
+  ...
+# Subtest: leave backup approval expires with the cover window and past approved leave cannot be cancelled
+ok 33 - leave backup approval expires with the cover window and past approved leave cannot be cancelled
+  ---
+  duration_ms: 25.8653
+  type: 'test'
+  ...
+# Subtest: live leave endpoint queues signed commands and only the owner worker writes protected records
+ok 34 - live leave endpoint queues signed commands and only the owner worker writes protected records
+  ---
+  duration_ms: 23.6459
+  type: 'test'
+  ...
+# Subtest: owner queue worker rechecks approval balance when competing requests were queued
+ok 35 - owner queue worker rechecks approval balance when competing requests were queued
+  ---
+  duration_ms: 38.017
+  type: 'test'
+  ...
+# Subtest: recovery stays editable after acknowledgement, versions changes and suppresses unchanged retries
+ok 36 - recovery stays editable after acknowledgement, versions changes and suppresses unchanged retries
+  ---
+  duration_ms: 97.7837
+  type: 'test'
+  ...
+# Subtest: resolution note requires actual employee completion and missing recovery inputs reject save
+ok 37 - resolution note requires actual employee completion and missing recovery inputs reject save
+  ---
+  duration_ms: 31.1788
+  type: 'test'
+  ...
+# Subtest: leave coverage routes alerts to backup and new alerts return automatically to primary
+ok 38 - leave coverage routes alerts to backup and new alerts return automatically to primary
+  ---
+  duration_ms: 46.0699
+  type: 'test'
+  ...
+# Subtest: working calendar skips configured holidays and respects a nonstandard workweek
+ok 39 - working calendar skips configured holidays and respects a nonstandard workweek
+  ---
+  duration_ms: 21.9173
+  type: 'test'
+  ...
+# Subtest: fixed recurrence retains anchor, skips elapsed schedule dates and deduplicates rolled dates
+ok 40 - fixed recurrence retains anchor, skips elapsed schedule dates and deduplicates rolled dates
+  ---
+  duration_ms: 29.6322
+  type: 'test'
+  ...
+# Subtest: weekly denominators include unresolved due cycles and mature review deadlines, with historical carryover
+ok 41 - weekly denominators include unresolved due cycles and mature review deadlines, with historical carryover
+  ---
+  duration_ms: 20.7886
+  type: 'test'
+  ...
+# Subtest: setup upgrades old header suffixes without changing history and refuses unknown columns
+ok 42 - setup upgrades old header suffixes without changing history and refuses unknown columns
+  ---
+  duration_ms: 24.7087
+  type: 'test'
+  ...
+# Subtest: weekly live cutoff includes due, review and recovery events exactly at now
+ok 43 - weekly live cutoff includes due, review and recovery events exactly at now
+  ---
+  duration_ms: 21.3123
+  type: 'test'
+  ...
+# Subtest: weekly view agrees with workboard at cutoff and shows its selected week
+ok 44 - weekly view agrees with workboard at cutoff and shows its selected week
+  ---
+  duration_ms: 101.7639
   type: 'test'
   ...
 # Subtest: preview completes and prepares next cycle using the shared engine
-ok 16 - preview completes and prepares next cycle using the shared engine
+ok 45 - preview completes and prepares next cycle using the shared engine
   ---
-  duration_ms: 49.9967
+  duration_ms: 21.8757
   type: 'test'
   ...
 # Subtest: preview runs manager and leadership flows without repeated alerts
-ok 17 - preview runs manager and leadership flows without repeated alerts
+ok 46 - preview runs manager and leadership flows without repeated alerts
   ---
-  duration_ms: 25.1722
+  duration_ms: 60.2682
   type: 'test'
   ...
 # Subtest: preview tabs, employee filter, input escaping and persistence work
-ok 18 - preview tabs, employee filter, input escaping and persistence work
+ok 47 - preview tabs, employee filter, input escaping and persistence work
   ---
-  duration_ms: 33.6252
+  duration_ms: 72.9463
   type: 'test'
   ...
 # Subtest: preview blocks empty tickets and early future completion
-ok 19 - preview blocks empty tickets and early future completion
+ok 48 - preview blocks empty tickets and early future completion
   ---
-  duration_ms: 13.9772
+  duration_ms: 16.9538
+  type: 'test'
+  ...
+# Subtest: preview recovery drawer saves versions after review without duplicating unchanged plans
+ok 49 - preview recovery drawer saves versions after review without duplicating unchanged plans
+  ---
+  duration_ms: 41.8618
+  type: 'test'
+  ...
+# Subtest: frontend scenarios, weekly reporting, policy changes and holiday controls use shared rules
+ok 50 - frontend scenarios, weekly reporting, policy changes and holiday controls use shared rules
+  ---
+  duration_ms: 132.8658
+  type: 'test'
+  ...
+# Subtest: template and generated frontend expose unique IDs and local-simulation boundaries
+ok 51 - template and generated frontend expose unique IDs and local-simulation boundaries
+  ---
+  duration_ms: 26.9495
+  type: 'test'
+  ...
+# Subtest: standalone build preserves source replacement tokens and CSV neutralizes spreadsheet formulas
+ok 52 - standalone build preserves source replacement tokens and CSV neutralizes spreadsheet formulas
+  ---
+  duration_ms: 45.0934
   type: 'test'
   ...
 # Subtest: 1: 7/15/30 day completion creates one next cycle, completion anchored
-ok 20 - 1: 7/15/30 day completion creates one next cycle, completion anchored
+ok 53 - 1: 7/15/30 day completion creates one next cycle, completion anchored
   ---
-  duration_ms: 39.2294
+  duration_ms: 45.1476
   type: 'test'
   ...
 # Subtest: 2: single-point ticket completion records actual editor, timestamp, next cycle
-ok 21 - 2: single-point ticket completion records actual editor, timestamp, next cycle
+ok 54 - 2: single-point ticket completion records actual editor, timestamp, next cycle
   ---
-  duration_ms: 4.1843
+  duration_ms: 4.7512
   type: 'test'
   ...
 # Subtest: 3: daily attestation needs no ticket; Friday rolls to Monday
-ok 22 - 3: daily attestation needs no ticket; Friday rolls to Monday
+ok 55 - 3: daily attestation needs no ticket; Friday rolls to Monday
   ---
-  duration_ms: 4.941
+  duration_ms: 6.3054
   type: 'test'
   ...
 # Subtest: 4: manager alerted at same-day cutoff, not before
-ok 23 - 4: manager alerted at same-day cutoff, not before
+ok 56 - 4: manager alerted at same-day cutoff, not before
   ---
-  duration_ms: 1.8012
+  duration_ms: 4.0531
   type: 'test'
   ...
 # Subtest: 5: manager acknowledgment requires manager identity and action note
-ok 24 - 5: manager acknowledgment requires manager identity and action note
+ok 57 - 5: manager acknowledgment requires manager identity and action note
   ---
-  duration_ms: 2.0309
+  duration_ms: 4.24
   type: 'test'
   ...
 # Subtest: 6/7: escalate missing acknowledgment at 4h, unresolved acknowledged work at 24h
-ok 25 - 6/7: escalate missing acknowledgment at 4h, unresolved acknowledged work at 24h
+ok 58 - 6/7: escalate missing acknowledgment at 4h, unresolved acknowledged work at 24h
   ---
-  duration_ms: 1.7667
+  duration_ms: 3.3091
   type: 'test'
   ...
 # Subtest: 8: repeated jobs do not duplicate cycles or manager/leadership alerts
-ok 26 - 8: repeated jobs do not duplicate cycles or manager/leadership alerts
+ok 59 - 8: repeated jobs do not duplicate cycles or manager/leadership alerts
   ---
-  duration_ms: 3.7295
+  duration_ms: 4.3145
   type: 'test'
   ...
 # Subtest: reject missing ticket, missing identity, wrong employee, early completion
-ok 27 - reject missing ticket, missing identity, wrong employee, early completion
+ok 60 - reject missing ticket, missing identity, wrong employee, early completion
   ---
-  duration_ms: 7.7892
+  duration_ms: 13.861
   type: 'test'
   ...
 # Subtest: completed task still escalates if required manager review is missing
-ok 28 - completed task still escalates if required manager review is missing
+ok 61 - completed task still escalates if required manager review is missing
   ---
-  duration_ms: 1.5465
+  duration_ms: 3.9908
   type: 'test'
   ...
 # Subtest: send failure is held for review and not retried automatically
-ok 29 - send failure is held for review and not retried automatically
+ok 62 - send failure is held for review and not retried automatically
   ---
-  duration_ms: 2.631
+  duration_ms: 7.3437
   type: 'test'
   ...
 # Subtest: successful live delivery logs once and refuses placeholder recipients
-ok 30 - successful live delivery logs once and refuses placeholder recipients
+ok 63 - successful live delivery logs once and refuses placeholder recipients
   ---
-  duration_ms: 2.4526
+  duration_ms: 3.9085
   type: 'test'
   ...
-1..30
-# tests 30
+1..63
+# tests 63
 # suites 0
-# pass 30
+# pass 63
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 436.8094
+# duration_ms 713.2678

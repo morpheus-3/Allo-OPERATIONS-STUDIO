@@ -3,11 +3,12 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs'),vm=require('node:vm');
 function harness() {
   const ctx=vm.createContext({Utilities:{formatDate(d){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);}},console});
-  vm.runInContext(fs.readFileSync('src/Engine.gs','utf8')+'\n'+fs.readFileSync('src/Code.gs','utf8'),ctx);
-  const db={Tasks:[],Workboard:[],EmailLog:[],Settings:[]};
+  vm.runInContext(fs.readFileSync('src/Engine.gs','utf8')+'\n'+fs.readFileSync('src/Code.gs','utf8')+'\n'+fs.readFileSync('src/Leave.gs','utf8'),ctx);
+  const db={Tasks:[],Workboard:[],EmailLog:[],Settings:[],RecoveryLog:[],LeaveQueue:[],LeaveLog:[],LeaveRequests:[]};
   ctx.records=n=>db[n].map(x=>({...x}));
   ctx.save=(n,o)=>{if(!o._row)o._row=db[n].length+2;db[n][o._row-2]={...o};};
   ctx.protectCycle=()=>{};ctx.formatCycle=()=>{};ctx.requireOwner=()=>{};ctx.locked=fn=>fn();ctx.PropertiesService={getScriptProperties:()=>({setProperty(){}})};
+  ctx.refreshWeeklyReport=()=>{};
   ctx.book=()=>({getUrl:()=> 'https://example.test/sheet'});
   ctx.settings=()=>({ManagerEmail:'manager@allo.test',LeadershipEmail:'leader@allo.test',AckHours:4,ResolveHours:24,DryRun:true});
   return {ctx,db};

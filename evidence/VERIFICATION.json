@@ -1,15 +1,19 @@
 {
-  "release": "1.1.0",
-  "verifiedAtUTC": "2026-10-08T16:33:32.306Z",
+  "release": "2.1.0",
+  "verifiedAtUTC": "2026-10-17T17:18:12.357Z",
   "runtime": "v22.22.3",
-  "tests": 30,
-  "passed": 30,
+  "tests": 63,
+  "passed": 63,
   "failed": 0,
   "realGoogleServicesVerified": false,
   "sourceHashes": {
-    "Code.gs": "ea3d23a0e88406621ef6379e7f3c3f44be51d259a63adbdacc4b59cd39d34d29",
-    "Diagnostics.gs": "1db487d952c657de8ba5f8c20a2b0c531557f4b3b8a018a31467e2fa1f96f3f9",
-    "Engine.gs": "67f30b9e7cfd0579ebec2758a09202ce4570c11e061edef945f4a4c64fc5f053",
-    "appsscript.json": "78516518ebe75e8c838a6c6d893c02870f0e87e9cd8fe71eb0fc985d093cfb98"
+    "Assistant.gs": "1c606e2010e897d07bf5596ccb4225d2ecc02b90967dbc2ad9a7bef4baeefce3",
+    "Code.gs": "a1c7d608b1e656dd7f05aa53c8a116aa3ca3fa93b41e03257bd217b3d5a774ad",
+    "Diagnostics.gs": "2f1dfa31d4b0650d70c496d6f0ca557ef3bd9013f1898b1972c95e682550db55",
+    "Engine.gs": "1a42c742adda6fa7970c503a5ef1bb6b62a0951c76ff3322bcf3b2565b56e5fc",
+    "Gaurang.html": "ea82c7579f5bdef553950dfb1f5bcbdd9637159a909b5fb489c9cce2def43d2a",
+    "Leave.gs": "94f0dbe01ef0e4f8348e784b0de411cf7d7e30e3198e65915e5113d1490364e4",
+    "Leave.html": "3f9fce46d0ba1b426b5ef18d330a6e5655f5a5aa21ed1eacf6e1e3e726a94c1b",
+    "appsscript.json": "6e007153ca05d62e562e757486f2afa0e4f9827484fcb3eb6c664c30be8bd294"
   }
 }

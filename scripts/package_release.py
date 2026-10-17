@@ -1,193 +1,111 @@
-"""Build the workbook, evaluator report and submission archive from verified source.
-Install build-only dependencies with:
-python -m pip install --target .build-deps -r requirements-build.txt
+"""Prepare artifacts, then finalize a hash-verified release after visual review.
+Usage: python scripts/package_release.py --prepare | --finalize
+Use the bundled Python and ALLO_ARTIFACT_MODULES dependency path documented in README.
 """
 from pathlib import Path
-import hashlib
-import json
-import re
-import subprocess
-import sys
-import zipfile
-from datetime import datetime
+import argparse, hashlib, html, json, os, re, subprocess, zipfile
+from datetime import date
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / '.build-deps'))
-from openpyxl import Workbook, load_workbook
-from openpyxl.styles import Font, PatternFill, Alignment
-from openpyxl.worksheet.datavalidation import DataValidation
-from docx import Document
-from docx.shared import Inches, Pt, RGBColor
+ROOT=Path(__file__).resolve().parents[1]
+os.chdir(ROOT)
+VERSION=json.loads((ROOT/'package.json').read_text())['version']
+RELEASE_DATE=date.fromisoformat(json.loads((ROOT/'package.json').read_text())['releaseDate']).strftime('%d %B %Y').lstrip('0')
+CANDIDATE=json.loads((ROOT/'candidate.json').read_text())
+assert CANDIDATE.get('confirmedByCandidate') is True, 'Confirm candidate details before building'
+assert all(CANDIDATE.get(k) and '[' not in CANDIDATE[k] for k in ['name','email','portfolio'])
 
-subprocess.run(['node', 'scripts/verify.cjs'], cwd=ROOT, check=True)
-out = ROOT / 'submission'
-out.mkdir(exist_ok=True)
-verification = json.loads((ROOT / 'evidence/VERIFICATION.json').read_text())
-scenarios = json.loads((ROOT / 'evidence/DEMO_RESULTS.json').read_text())['results']
-code = (ROOT / 'src/Code.gs').read_text(encoding='utf-8')
-headers = {}
-for name in ['Tasks', 'Workboard', 'Settings', 'EmailLog']:
-    match = re.search(r'\b' + name + r': \[(.*?)\]', code)
-    headers[name] = re.findall(r"'([^']+)'", match.group(1))
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 
-wb = Workbook()
-guide = wb.active
-guide.title = 'Guide'
-guide.append(['ALLO INNOWARE | RECURRING OPERATIONS', 'REVIEWER / OWNER GUIDE'])
-for row in [
-    ['Prototype status', 'Template/local tests supplied; core live workflow and email tests reported by user. See HOSTED_ACCEPTANCE.md.'],
-    ['Important', 'This XLSX does not contain or execute Apps Script. Open as a Google Sheet and deploy the supplied script.'],
-    ['1. Import', 'Upload to Google Drive and open as a Google Sheet, or use a blank Sheet.'],
-    ['2. Script', 'Extensions > Apps Script: paste Allo_Operations_AppsScript.gs, or all three separate source files, not both.'],
-    ['3. Manifest', 'Enable appsscript.json editing and paste the supplied manifest. Save.'],
-    ['4. Configure', 'Set real employee/manager/leadership email addresses before setup. Keep DryRun TRUE.'],
-    ['5. Initialize', 'Run setup as the intended owner, authorize and reload the Sheet.'],
-    ['6. Install', 'Use Allo Operations > Install automation triggers. Run Health check.'],
-    ['7. Employee', 'Use a Workboard filter view. Ticket ID in Proof, then check Complete. Daily tasks use attestation.'],
-    ['8. Manager', 'Read Manager view, enter action note in Workboard Q and check Acknowledge N.'],
-    ['9. Acceptance', 'Use DEPLOYMENT.md and HOSTED_ACCEPTANCE.md. Verify real users and actual received emails.'],
-    ['Recurrence', 'Completion anchored: +7/15/30 calendar days. Daily: next Mondayâ€“Friday. Holidays not modeled.'],
-    ['SLA', '17:00 IST cutoff; manager poll every 5m; leadership after 4h without review or 24h unresolved.'],
-    ['Delivery', 'One reserved key per cycle/stage. Ambiguous mail delivery requires owner review.'],
-    ['Local evidence', f"{verification['passed']}/{verification['tests']} tests passed; all 8 deterministic scenarios passed. These use local adapters."],
-]:
-    guide.append(row)
-for name, cols in headers.items():
-    s = wb.create_sheet(name)
-    s.append(cols)
-tasks = wb['Tasks']
-for i, (title, interval) in enumerate(zip(['Daily Operations Update', 'Portal Task A', 'Portal Task B', 'Portal Task C'], [1, 7, 15, 30])):
-    letter = chr(65 + i)
-    tasks.append([f'TASK-{i+1}', title, f'Employee {letter}', f'employee{letter.lower()}@example.com', interval, 'DAILY' if i == 0 else 'TICKET', datetime(2026, 10, 8), 17, True])
-for cell in tasks['G'][1:]:
-    cell.number_format = 'yyyy-mm-dd'
-for key, value in [('ManagerEmail','manager@example.com'),('LeadershipEmail','leadership@example.com'),('AckHours',4),('ResolveHours',24),('DryRun',True)]:
-    wb['Settings'].append([key,value])
-for name in ['Manager','Health']:
-    s = wb.create_sheet(name)
-    s.append(['ALLO OPERATIONS | '+name.upper(), 'INSTALLATION NOTE'])
-    s.append(['Generated by Apps Script setup', 'Run setup after opening this workbook as a Google Sheet.'])
-s = wb.create_sheet('RuleTests')
-s.append(['Assignment test','Scenario','Local result','Evidence boundary'])
-for r in scenarios:
-    s.append([r['id'],r['title'],r['status'],'Local Google-service adapters; real Google acceptance not run'])
-for sheet in wb:
-    sheet.freeze_panes = 'A2'
-    sheet.sheet_view.showGridLines = False
-    sheet.row_dimensions[1].height = 32
-    for cell in sheet[1]:
-        cell.fill = PatternFill('solid', fgColor='173E36')
-        cell.font = Font(name='Calibri', size=11, bold=True, color='FFFFFF')
-        cell.alignment = Alignment(vertical='center', wrap_text=True)
-    for row in sheet.iter_rows(min_row=2):
-        sheet.row_dimensions[row[0].row].height = 32
-        for cell in row:
-            cell.font = Font(name='Calibri', size=11, color='254D3F')
-            cell.alignment = Alignment(vertical='top', wrap_text=True)
-            if cell.row % 2 == 0:
-                cell.fill = PatternFill('solid', fgColor='F0F5F0')
-    for col in sheet.columns:
-        sheet.column_dimensions[col[0].column_letter].width = 24
-    if sheet.title in ['Guide','Manager','Health']:
-        sheet.column_dimensions['A'].width=45
-        sheet.column_dimensions['B'].width=105
-    if sheet.title == 'Tasks':
-        sheet.column_dimensions['B'].width=32
-        sheet.column_dimensions['D'].width=38
-    if sheet.title == 'Workboard':
-        sheet.column_dimensions['C'].width=32
-        sheet.column_dimensions['H'].width=34
-        sheet.column_dimensions['Q'].width=42
-        sheet.column_dimensions['S'].width=50
-    if sheet.title in ['Tasks','Workboard','EmailLog']:
-        sheet.auto_filter.ref=f'A1:{sheet.cell(1,sheet.max_column).column_letter}{max(sheet.max_row,2)}'
-for sqref, formula in [('E2:E1000','"1,7,15,30"'),('F2:F1000','"DAILY,TICKET"'),('I2:I1000','"TRUE,FALSE"')]:
-    dv=DataValidation(type='list',formula1=formula,allow_blank=False)
-    dv.errorTitle='Choose a supported value'
-    dv.error='Use the provided dropdown values.'
-    dv.showErrorMessage=True
-    tasks.add_data_validation(dv)
-    dv.add(sqref)
-template=out/'Allo_Operations_Template.xlsx'
-wb.save(template)
-loaded=load_workbook(template)
-for name, cols in headers.items():
-    assert [c.value for c in loaded[name][1]] == cols, f'Header mismatch: {name}'
-assert loaded['Tasks'].max_row == 5
+def pdf_from_markdown(source,output,preface=''):
+    styles=getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='ReportBody',fontName='Helvetica',fontSize=10,leading=13,spaceAfter=5,allowWidows=0,allowOrphans=0))
+    styles.add(ParagraphStyle(name='ReportTable',fontName='Helvetica',fontSize=8.8,leading=12))
+    styles['Title'].alignment=0;styles['Title'].fontSize=22;styles['Title'].leading=27
+    for name in ['Heading2','Heading3']:
+        styles[name].textColor=colors.black;styles[name].spaceBefore=11;styles[name].spaceAfter=7
+    def rich(s):
+        s=html.escape(s)
+        s=re.sub(r'`([^`]+)`',r'<font name="Courier">\1</font>',s)
+        return re.sub(r'\*\*([^*]+)\*\*',r'<b>\1</b>',s)
+    lines=source.read_text(encoding='utf-8').splitlines();story=[];i=0
+    while i<len(lines):
+        line=lines[i].strip()
+        if not line:i+=1;continue
+        if line.startswith('|'):
+            data=[]
+            while i<len(lines) and lines[i].strip().startswith('|'):
+                cells=[c.strip() for c in lines[i].strip().strip('|').split('|')]
+                if not all(re.fullmatch(r':?-+:?',c) for c in cells):data.append([Paragraph(rich(c),styles['ReportTable']) for c in cells])
+                i+=1
+            widths=[110,401] if len(data[0])==2 else [511/len(data[0])]*len(data[0])
+            t=Table(data,colWidths=widths,repeatRows=1,hAlign='LEFT')
+            t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),colors.HexColor('#e9edef')),('GRID',(0,0),(-1,-1),.5,colors.HexColor('#d9d9d9')),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),8),('RIGHTPADDING',(0,0),(-1,-1),8),('TOPPADDING',(0,0),(-1,-1),5),('BOTTOMPADDING',(0,0),(-1,-1),5)]))
+            story.extend([t,Spacer(1,9)]);continue
+        if line.startswith('# '):
+            story.append(Paragraph(rich(line[2:]),styles['Title']))
+            if preface:story.append(Paragraph(rich(preface).replace('&lt;br/&gt;','<br/>'),styles['ReportBody']))
+        elif line.startswith('## '):
+            if line=='## Explain the code in your own words':story.append(PageBreak())
+            story.append(Paragraph(rich(line[3:]),styles['Heading2']))
+        elif line.startswith('### '):story.append(Paragraph(rich(line[4:]),styles['Heading3']))
+        else:
+            text=line
+            while i+1<len(lines) and lines[i+1].strip() and not re.match(r'^(#|\||- |\d+\. )',lines[i+1].strip()):i+=1;text+=' '+lines[i].strip()
+            story.append(KeepTogether([Paragraph(rich(text),styles['ReportBody'])]))
+        i+=1
+    def footer(canvas,doc):
+        canvas.setFont('Helvetica',8);canvas.setFillColor(colors.HexColor('#63766d'))
+        canvas.drawString(42,24,'Allo operations | Release '+VERSION+' | '+RELEASE_DATE)
+        canvas.drawRightString(A4[0]-42,24,str(doc.page))
+    SimpleDocTemplate(str(output),pagesize=A4,rightMargin=42,leftMargin=42,topMargin=40,bottomMargin=43,title=source.stem.replace('_',' '),author=CANDIDATE['name']).build(story,onFirstPage=footer,onLaterPages=footer)
 
-combined='// Allo Operations Manager v1.1.0\n// Paste this bundle OR the separate files, never both.\n\n'
-combined+='\n\n'.join((ROOT/'src'/file).read_text(encoding='utf-8') for file in ['Engine.gs','Code.gs','Diagnostics.gs'])
-(out/'Allo_Operations_AppsScript.gs').write_text(combined,encoding='utf-8',newline='\n')
-
-doc=Document()
-sec=doc.sections[0]
-sec.top_margin=Inches(.7);sec.bottom_margin=Inches(.7)
-style=doc.styles['Normal'];style.font.name='Calibri';style.font.size=Pt(10.5)
-style.paragraph_format.space_after=Pt(7)
-doc.add_heading('Allo AI Operations Manager',0)
-doc.add_paragraph('Recurring task tracking, pending reports and escalation automation',style='Subtitle')
-doc.add_paragraph('Assignment prototype | Release 1.1.0 | 8 October 2026')
-doc.add_paragraph('Candidate: [YOUR NAME]    Contact: [YOUR EMAIL]    Portfolio: [YOUR URL]')
-doc.add_heading('Purpose and operating model',1)
-doc.add_paragraph('The system gives four employees one Google Sheets Workboard to see due work and record completion. A task master defines daily, 7-, 15- and 30-day recurrence. Apps Script closes the completed cycle, retains proof and editor/time metadata, prepares the next cycle and manages manager/leadership alerts.')
-doc.add_heading('Daily task completion tracking',1)
-doc.add_paragraph('After posting the daily WhatsApp update, Employee A checks Complete in the same Workboard row. An evidence URL or short note is optional. The checkbox records authenticated employee attestation and time; it is not independent proof that the message was posted. Portal tasks require a Ticket ID, whose presence is validated without claiming access to an unspecified external portal.')
-doc.add_heading('Recurring cycles and single-point updates',1)
-doc.add_paragraph('For portal tasks, the next due date is the actual completion calendar date plus 7, 15 or 30 days, at the configured cutoff. Daily work advances to the next Mondayâ€“Friday. One unresolved cycle stays open; missed dates do not generate duplicate work. Completion-anchored recurrence deliberately shifts deadlines after late completion. Employees never calculate dates or repeat the update in another sheet.')
-doc.add_heading('Manager alerts and leadership SLA',1)
-table=doc.add_table(rows=1, cols=3);table.style='Light Shading Accent 1'
-for cell,text in zip(table.rows[0].cells,['Stage','Timing / condition','Action']):cell.text=text
-for values in [
-    ['Manager','At/after 17:00 IST; five-minute polling','Open Workboard, add a recovery/action note and acknowledge.'],
-    ['Leadership: review','Four elapsed hours after manager alert without acknowledgement','Escalate missed management review, even if employee later completed.'],
-    ['Leadership: resolution','24 elapsed hours after manager alert if still unresolved','Escalate outstanding work even if reviewed.'],
-    ['Suppression','Completion plus acknowledgement recorded','No further stage alert for that cycle.'],
-]:
-    for cell,text in zip(table.add_row().cells,values):cell.text=text
-doc.add_paragraph('The four-hour window supports same-evening review; 24 hours gives one full day to resolve work. These are configurable elapsed hours, including nights/weekends. Google scheduling is best effort. Only one manager and one leadership alert are created per cycle.')
-doc.add_heading('Reliability and safeguards',1)
-for text in [
-    'Stable task/date cycle IDs and cycle/stage alert keys prevent repeated jobs creating duplicates. ScriptLock serializes automation and edit handlers.',
-    'The alert key is reserved before MailApp is called. Ambiguous or failed delivery is held for owner review instead of blind automatic resending. Exactly-once delivery across Sheets and MailApp is not claimed.',
-    'Employee identity comes from the edit event. If unavailable, the update is rejected rather than attributed to the trigger owner. Compatible Workspace accounts must be verified in deployment.',
-    'Protected system fields and per-assignee input ranges reduce routine editing mistakes. Completed evidence and acknowledged reviews lock to the owner. Bound-script collaborators and owners remain trusted.',
-    'Validation rejects duplicate task IDs, impossible dates, unsupported recurrence, missing ticket proof and unsafe dry-run values. Health checks expose trigger presence, reservations, protections, mail quota and last automation heartbeat.',
-]:doc.add_paragraph(text,style='List Bullet')
-doc.add_heading('Eight required demonstration scenarios',1)
-table=doc.add_table(rows=1,cols=3);table.style='Light Shading Accent 1'
-for cell,text in zip(table.rows[0].cells,['Test','Scenario','Local result']):cell.text=text
-for r in scenarios:
-    for cell,text in zip(table.add_row().cells,[str(r['id']),r['title'],r['status']]):cell.text=text
-doc.add_paragraph(f"Verification: {verification['passed']}/{verification['tests']} automated tests pass. Source syntax, manifest JSON and standalone preview are checked. Evidence includes TEST_RESULTS.tap, DEMO_RESULTS.json and source SHA-256 hashes. Google-service adapters simulate spreadsheet storage, protections, triggers, time, user identity and MailApp. These results do not prove live Google integration or real delivery.")
-doc.add_heading('Deliverables and handover',1)
-doc.add_paragraph('The package includes the importable workbook, complete Apps Script bundle and separate source files, interactive offline walkthrough, local verification scripts, eight-scenario report, deployment guide, hosted acceptance record and requirement map. Runtime has no third-party Node dependencies. Python document-generation libraries are build-only.')
-doc.add_heading('Final acceptance status',1)
-doc.add_paragraph('Local checks are complete. The user subsequently deployed a live Sheet and confirmed completion, acknowledgement, actual manager/leadership receipts and duplicate prevention. These are user-reported tests using one account for all roles; final Health checks passed according to pasted results; distinct-user permission testing remains. See HOSTED_ACCEPTANCE.md. The XLSX template does not embed Apps Script.')
-doc.add_heading('Practical limitations and next steps',1)
-doc.add_paragraph('Holidays are not modeled; the business should confirm its work calendar and SLA before use. Ticket IDs are not checked against a company portal. WhatsApp posting is attested rather than independently verified. Shared Sheet visibility is not per-employee confidentiality. If stronger isolation is required, use a separately controlled backend and authorized portal/messaging integrations.')
-footer=sec.footer.paragraphs[0]
-footer.text='Allo Operations Manager | Assignment prototype | Evidence-backed local verification'
-footer.style=doc.styles['Caption']
-report=out/'SOLUTION_REPORT.docx';doc.save(report)
-reopened=Document(report)
-assert len(reopened.paragraphs)>20 and len(reopened.tables)==2
-
-release=ROOT/'release';release.mkdir(exist_ok=True)
-archive=release/'Allo_AI_Operations_Manager_v1.1.0.zip'
-files=[]
-for name in ['README.md','CHECKPOINTS.md','REQUIREMENTS.md','DEMO.md','package.json','requirements-build.txt','demo.html','Open-Preview.cmd','.gitignore','.gitattributes']:
-    files.append(ROOT/name)
-for folder in ['src','scripts','tests','web','evidence','submission']:
-    files.extend(f for f in (ROOT/folder).rglob('*') if f.is_file() and '__pycache__' not in f.parts)
-manifest={str(f.relative_to(ROOT)).replace('\\','/'):hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(files)}
-(release/'SHA256SUMS.json').write_text(json.dumps(manifest,indent=2)+'\n',newline='\n')
-with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
-    for f in sorted(files):z.write(f,'allo-ai-operations-manager/'+str(f.relative_to(ROOT)))
-    z.write(release/'SHA256SUMS.json','allo-ai-operations-manager/SHA256SUMS.json')
-with zipfile.ZipFile(archive) as z:
-    assert z.testzip() is None
-    for name,sha in manifest.items():
-        assert hashlib.sha256(z.read('allo-ai-operations-manager/'+name)).hexdigest()==sha
-    assert not any('.build-deps' in n or '__pycache__' in n or n.endswith('.env') for n in z.namelist())
-print('Workbook and DOCX reopened successfully; archive CRC and SHA-256 manifest verified.')
-print(f'Release: {archive} ({archive.stat().st_size:,} bytes)')
+parser=argparse.ArgumentParser();parser.add_argument('--prepare',action='store_true');parser.add_argument('--documents-only',action='store_true');parser.add_argument('--finalize',action='store_true');args=parser.parse_args()
+if args.prepare or args.documents_only:
+    if args.prepare:
+        subprocess.run(['node','scripts/verify.cjs'],check=True)
+        subprocess.run(['node','scripts/build-workbook.mjs'],check=True)
+        combined='// Allo Operations Manager v'+VERSION+'\n// Paste this bundle OR the separate source files, never both.\n\n'
+        combined+='\n\n'.join((ROOT/'src'/f).read_text(encoding='utf-8') for f in ['Engine.gs','Code.gs','Diagnostics.gs','Assistant.gs','Leave.gs'])
+        (ROOT/'submission/Allo_Operations_AppsScript.gs').write_text(combined,encoding='utf-8',newline='\n')
+    v=json.loads((ROOT/'evidence/VERIFICATION.json').read_text())
+    preface=f"Release {VERSION} | {RELEASE_DATE}<br/>{CANDIDATE['name']} | {CANDIDATE['email']}<br/>Portfolio: {CANDIDATE['portfolio']}<br/>Local verification: {v['passed']}/{v['tests']} tests and eight scenarios pass."
+    pdf_from_markdown(ROOT/'submission/SOLUTION_REPORT.md',ROOT/'submission/SOLUTION_REPORT.pdf',preface)
+    (ROOT/'private').mkdir(exist_ok=True)
+    interview=ROOT/'submission/INTERVIEW_PREPARATION.md'
+    if interview.exists():pdf_from_markdown(interview,ROOT/'private/INTERVIEW_PREPARATION.pdf','Candidate preparation | Release '+VERSION)
+    draft=f"To: hr.ops.allo@gmail.com\nSubject: AI Operations Manager assignment submission - {CANDIDATE['name']}\n\nDear Allo Innoware Hiring Team,\n\nPlease find my recurring operations assignment for the AI Operations Manager role.\n\nWorking Google Sheet: https://docs.google.com/spreadsheets/d/1aLoeuykOMAq-sWQ7JCzsnpEkuSQle93c6mgVHKYYsn4/edit\nSource repository: https://github.com/morpheus-3/Allo-OPERATIONS-STUDIO\nPortfolio: {CANDIDATE['portfolio']}\n\nAttached: release {VERSION}, including solution report, Apps Script, setup guide and reproducible evidence. Employees complete tasks from one Workboard; the system prepares recurring cycles and records manager review and leadership escalation.\n\n{v['passed']}/{v['tests']} local tests and eight simulated scenarios pass. Earlier live workflow and email receipts were user-confirmed with one account and accelerated escalation timing. Acceptance of this updated release, distinct-user permissions and formula calculations remains pending; the included acceptance protocol lists the exact checks. Evaluator access must be confirmed before sending.\n\nI would welcome an opportunity to demonstrate the workflow and explain the decisions.\n\nRegards,\n{CANDIDATE['name']}\n{CANDIDATE['email']}\n"
+    (ROOT/'private/Submission_Email.txt').write_text(draft,encoding='utf-8')
+    outputs=['submission/SOLUTION_REPORT.pdf','submission/Allo_Operations_Template.xlsx']
+    (ROOT/'evidence/ARTIFACT_QA_REQUEST.json').write_text(json.dumps({ 'release':VERSION,'artifactHashes':{p:sha(ROOT/p) for p in outputs}},indent=2)+'\n')
+    print('Prepared artifacts. Render and inspect PDF pages and workbook renders, then record ARTIFACT_QA.json and run --finalize.')
+elif args.finalize:
+    request=json.loads((ROOT/'evidence/ARTIFACT_QA_REQUEST.json').read_text())
+    qa=json.loads((ROOT/'evidence/ARTIFACT_QA.json').read_text())
+    assert qa['visualReviewPassed'] is True and qa['artifactHashes']==request['artifactHashes'] and qa['release']==VERSION
+    for p,h in request['artifactHashes'].items():assert sha(ROOT/p)==h, 'Artifact changed since review: '+p
+    v=json.loads((ROOT/'evidence/VERIFICATION.json').read_text());assert v['release']==VERSION and v['failed']==0
+    for f,h in v['sourceHashes'].items():assert sha(ROOT/'src'/f)==h, 'Source changed since verification: '+f
+    bundle=(ROOT/'submission/Allo_Operations_AppsScript.gs').read_text(encoding='utf-8')
+    for f in ['Engine.gs','Code.gs','Diagnostics.gs','Assistant.gs','Leave.gs']:assert (ROOT/'src'/f).read_text(encoding='utf-8') in bundle
+    excluded={'INTERVIEW_PREPARATION.md','INTERVIEW_WALKTHROUGH.md','SOLUTION_REPORT.docx'}
+    files=[ROOT/n for n in ['README.md','CHECKPOINTS.md','REQUIREMENTS.md','DEMO.md','package.json','candidate.json','requirements-build.txt','demo.html','leave.html','Open-Preview.cmd','.gitignore','.gitattributes']]
+    for folder in ['src','scripts','tests','web','evidence','submission']:
+        files.extend(p for p in (ROOT/folder).rglob('*') if p.is_file() and '__pycache__' not in p.parts and p.name not in excluded and not p.name.endswith('.inspect.ndjson'))
+    assert not any(('YOUR'+' NAME') in p.read_text(encoding='utf-8') for p in files if p.suffix in ['.md','.json','.py','.gs','.cjs','.mjs','.html'])
+    manifest={p.relative_to(ROOT).as_posix():sha(p) for p in sorted(files)}
+    release=ROOT/'release';release.mkdir(exist_ok=True)
+    (release/'SHA256SUMS.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    archive=release/f'Allo_AI_Operations_Manager_v{VERSION}.zip'
+    with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
+        for p in sorted(files):z.write(p,'allo-ai-operations-manager/'+p.relative_to(ROOT).as_posix())
+        z.write(release/'SHA256SUMS.json','allo-ai-operations-manager/SHA256SUMS.json')
+    with zipfile.ZipFile(archive) as z:
+        assert z.testzip() is None
+        for name,h in manifest.items():assert hashlib.sha256(z.read('allo-ai-operations-manager/'+name)).hexdigest()==h
+        assert not any('/private/' in n or '.build-deps' in n or '__pycache__' in n or n.endswith('.env') for n in z.namelist())
+    print(f'Release {VERSION}: {len(manifest)} files; CRC and every SHA-256 verified. '+str(archive))
+else:parser.error('Choose --prepare or --finalize')

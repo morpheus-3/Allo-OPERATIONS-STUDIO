@@ -1,7 +1,14 @@
 const fs=require('node:fs'),vm=require('node:vm');
 const template=fs.readFileSync('web/demo.template.html','utf8');
 const engine=fs.readFileSync('src/Engine.gs','utf8');
+const assistant=fs.readFileSync('src/Assistant.gs','utf8');
+const leave=fs.readFileSync('src/Leave.gs','utf8');
 const preview=fs.readFileSync('web/preview.js','utf8');
-new vm.Script(engine+'\n'+preview);
-fs.writeFileSync('demo.html',template.replace('__ENGINE__',engine).replace('__PREVIEW__',preview));
+const chat=fs.readFileSync('web/gaurang.html','utf8'),css=fs.readFileSync('web/gaurang.css','utf8'),js=fs.readFileSync('web/gaurang.js','utf8');
+new vm.Script(engine+'\n'+leave+'\n'+assistant+'\n'+preview+'\n'+js);
+fs.writeFileSync('demo.html',template.replace('__ENGINE__',()=>engine+'\n'+leave+'\n'+assistant).replace('__PREVIEW__',()=>preview+'\n'+js).replace('__GAURANG_HTML__',()=>chat).replace('__GAURANG_CSS__',()=>css));
+fs.writeFileSync('src/Gaurang.html','<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><base target="_top"><style>'+css+'</style></head><body class="gaurang-sidebar">'+chat+'<script>'+js+'</script></body></html>');
+const leaveClient=fs.readFileSync('web/leave.js','utf8');new vm.Script(leaveClient);
+const leaveHTML=fs.readFileSync('web/leave.template.html','utf8').replace('__LEAVE_ENGINE__',()=>preview.split('\n')[0]+'\n'+engine).replace('__LEAVE_SOURCE__',()=>leave).replace('__LEAVE_CLIENT__',()=>leaveClient);
+fs.writeFileSync('leave.html',leaveHTML);fs.writeFileSync('src/Leave.html',leaveHTML);
 console.log('Built standalone demo.html from shared engine and preview source.');

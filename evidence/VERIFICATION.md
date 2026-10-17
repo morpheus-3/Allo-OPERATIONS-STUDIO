@@ -1,17 +1,20 @@
 # Local verification
 
-Release: 1.1.0
+Release: 2.1.0
 
 Runtime: v22.22.3
 
-Tests: 30/30 passed; 0 failed.
+Tests: 63/63 passed; 0 failed.
 
 Built standalone demo.html from shared engine and preview source.
 
 Engine.gs: syntax OK
 Code.gs: syntax OK
 Diagnostics.gs: syntax OK
+Assistant.gs: syntax OK
+Leave.gs: syntax OK
 Manifest: OK
+Optional Google formula acceptance helper: syntax OK (not executed against Google)
 
 All eight deterministic assignment scenarios passed. Evidence written to evidence/.
 

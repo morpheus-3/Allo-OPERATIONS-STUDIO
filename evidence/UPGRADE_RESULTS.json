@@ -1,0 +1,76 @@
+{
+  "release": "2.1.0",
+  "execution": "Local Google-service adapter; no live accounts or received mail",
+  "recoveryHistory": [
+    {
+      "_row": 2,
+      "EntryID": "TASK-2:2026-10-08:RECOVERY:1",
+      "CycleID": "TASK-2:2026-10-08",
+      "Revision": 1,
+      "UpdatedAt": "2026-10-08T11:30:00.000Z",
+      "UpdatedBy": "backup@allo.test",
+      "Blocker": "Portal outage",
+      "RecoveryOwner": "Employee B",
+      "RecoveryTargetAt": "2026-10-09T05:30:00.000Z",
+      "NextAction": "Retry portal",
+      "ResolutionNote": "",
+      "ChangeSummary": "Blocker, RecoveryOwner, RecoveryTargetAt, NextAction, ResolutionNote"
+    },
+    {
+      "_row": 3,
+      "EntryID": "TASK-2:2026-10-08:RECOVERY:2",
+      "CycleID": "TASK-2:2026-10-08",
+      "Revision": 2,
+      "UpdatedAt": "2026-10-08T11:30:00.000Z",
+      "UpdatedBy": "backup@allo.test",
+      "Blocker": "Portal outage",
+      "RecoveryOwner": "Employee B",
+      "RecoveryTargetAt": "2026-10-09T05:30:00.000Z",
+      "NextAction": "Use approved alternate route",
+      "ResolutionNote": "",
+      "ChangeSummary": "NextAction"
+    }
+  ],
+  "employeeCompletionUnchanged": "",
+  "alertRecipient": "backup@allo.test",
+  "primaryAfterLeave": "manager@allo.test",
+  "holidayNextDue": "2026-10-13T11:30:00.000Z",
+  "fixedNextDue": {
+    "due": "2026-10-29T11:30:00.000Z",
+    "skipped": 2
+  },
+  "weekly": {
+    "start": "2026-10-05",
+    "end": "2026-10-12",
+    "asOf": "2026-10-08T12:30:00.000Z",
+    "dueCount": 4,
+    "onTimeCount": 0,
+    "onTimeRate": 0,
+    "reviewCount": 0,
+    "compliantReviewCount": 0,
+    "reviewRate": null,
+    "carryover": 0,
+    "overdue": 4,
+    "ageBuckets": [
+      4,
+      0,
+      0
+    ],
+    "skippedOccurrences": 0,
+    "blockers": [
+      {
+        "label": "Unclassified",
+        "count": 3,
+        "actions": []
+      },
+      {
+        "label": "Portal outage",
+        "count": 1,
+        "actions": [
+          "Use approved alternate route"
+        ]
+      }
+    ]
+  },
+  "sentRealEmails": false
+}

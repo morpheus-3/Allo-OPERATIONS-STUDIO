@@ -1,0 +1,55 @@
+{
+  "release": "2.1.0",
+  "artifactHashes": {
+    "submission/SOLUTION_REPORT.pdf": "f3371a0d419f5c3977c0a57ed64924bfc06c5dad9ff4827812ecbfab0643f897",
+    "submission/Allo_Operations_Template.xlsx": "ef0609eca6d85aa750455e9ff192ccd8df25ffc7fd40341db25f235870f044fd"
+  },
+  "visualReviewPassed": true,
+  "visualReviewScope": "Packaged solution PDF, private interview PDF and workbook template only",
+  "reviewedOnIST": "2026-10-17",
+  "pdfPages": {
+    "SOLUTION_REPORT.pdf": 2,
+    "INTERVIEW_PREPARATION.pdf": 3
+  },
+  "workbookSheetsReviewed": [
+    "Guide",
+    "Tasks",
+    "Workboard",
+    "Settings",
+    "EmailLog",
+    "RecoveryLog",
+    "LeaveRequests",
+    "LeaveLog",
+    "LeaveQueue",
+    "Manager",
+    "Weekly",
+    "Health",
+    "RuleTests"
+  ],
+  "reviewedImageHashes": {
+    "final21-solution-1.png": "cd8f221ed78c7b28d9879fd7772003ad4e90fd55c6c915980666212c187c391c",
+    "final21-solution-2.png": "5476adb7a2019ba0a95556ade70da4eee40b19b7a6b9df80080a1c7eecd9f741",
+    "final21-interview-1.png": "63532e8298bebc202f365671c07da0ba99749f66210ff2f6d430c597bda0a1d5",
+    "final21-interview-2.png": "0f55b298a1c82fb83f863beed87ea8455ec984c9f05e67251a7230511dbb8298",
+    "final21-interview-3.png": "93e5367b59a35e58470d4834c795cecd56ad749913bae1d2f83cae66b10e1976",
+    "Guide.png": "4ec79eafd58e8e3d1a576921bc2d13941f49b1b4cfc0616ba4db505a78362b2e",
+    "Tasks.png": "7b5c8e3a98eda8be12bc96733d512369cb466da2e6425b81439a5fb124296b9d",
+    "Workboard.png": "ea0dc5befe626a547c1e91923da68e856b1259cc058180e111df6e3d4e7fc3c0",
+    "Workboard-Recovery.png": "692aa81e7554ab931b881df87708eb84cd2a2c76e611cffae2e2e33f1f596045",
+    "Settings.png": "44ffa446fdb6afd1312cb1a2e3725874569787a9aba780383cfc2dde4ad6805e",
+    "EmailLog.png": "cfccb0334ac5ca972eea5725b4d9ebc88f5422caf7c0b0a6ab52003d499206ba",
+    "RecoveryLog.png": "0c106af75892bfb0666f0c12a30654428b26eb6b681182e82f304983d4939c54",
+    "Manager.png": "80e82470f5d3e67ab68e68e0aa5feaf3658797b84db329ec7fe5d1c284539ba2",
+    "Weekly.png": "60dd3930ed49996c9d8aa4088fb1279f180612552239852735d8c8470afd4bca",
+    "Health.png": "c3018a11dea05cfa1e72f3d3bb51333d019b84000c381ebf53d0984de83fdec3",
+    "RuleTests.png": "807f62321e29ac7e65f279bab280f06c06f8bb24131b0d9017e4e470c7fb3654",
+    "LeaveRequests.png": "4f5c31024bd1a45fe718aaa792c73e086b5a4d945ff4a4c10531e0a0c2e2f7f0",
+    "LeaveLog.png": "c87332e10a2cc6eb2eab78ea05caee79abf2ec36067aadce413ae22d4f22ae1e",
+    "LeaveQueue.png": "65b252a22cb266ea916bb54c0d01d89fdd80ca0e836993ee0cc3870695443370"
+  },
+  "privateInterviewHash": "41938f8aafb34ee0cd68887063639170fc76c8eef2324c56941466b275a03e50",
+  "reviewMethod": "All five release 2.1 PDF pages reviewed, including image-identical interview pages. Guide, Settings and three new leave sheet renders reviewed. Remaining nine workbook sheets match earlier reviewed render hashes.",
+  "frontendVisualReviewPassed": false,
+  "frontendVisualReviewReason": "No browser session available. DOM workflow and HTTP checks pass; 63 local tests pass. Prior desktop screenshots predate paid leave.",
+  "limitations": "Live Google deployment, actual identities/protections, formulas, timer, email receipts, queue processing and evaluator access remain pending. Browser frontend visual checks remain pending."
+}

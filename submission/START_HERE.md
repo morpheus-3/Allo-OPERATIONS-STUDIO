@@ -1,25 +1,33 @@
-# Allo recurring operations prototype
+# Allo recurring operations release 2.1.0
 
-**Submission status: working prototype complete.** The user has confirmed live workflow/email tests and passing automated Health checks. Review `HOSTED_ACCEPTANCE.md` for evidence and the one-account testing limitation.
+Start with SOLUTION_REPORT.pdf. Google Sheets is the operating interface; demo.html is an offline simulation.
 
-Working Sheet: https://docs.google.com/spreadsheets/d/1aLoeuykOMAq-sWQ7JCzsnpEkuSQle93c6mgVHKYYsn4/edit (request access from the candidate if needed).
+Working Sheet: https://docs.google.com/spreadsheets/d/1aLoeuykOMAq-sWQ7JCzsnpEkuSQle93c6mgVHKYYsn4/edit
 
-## Reviewer route (about five minutes)
+## Evidence status
 
-1. Read `SOLUTION_REPORT.docx` for the problem, decisions and evidence.
-2. Open `demo.html` in a browser. Complete one portal task, then inspect its prepared future cycle. Daily tasks need no ticket.
-3. Reset the demo, advance to 17:00 and run automation repeatedly. See one manager alert per open cycle. Add a manager action note and acknowledge one task.
-4. Advance four hours: unacknowledged items escalate. Complete and acknowledge a task to stop its escalation. Advance a day to see unresolved acknowledged work escalate.
-5. Review `evidence/TEST_RESULTS.tap` and `evidence/DEMO_RESULTS.json`.
-6. For the actual operating system, follow `DEPLOYMENT.md`. Import `Allo_Operations_Template.xlsx` or start with a blank Sheet; copy the script files and run setup.
+45 local tests and eight deterministic scenarios pass. The 8 October hosted record contains user-confirmed results with one account across roles and accelerated escalation timing. Updated deployment, distinct users, actual formula results and evaluator access remain pending. Adapter tests do not prove real Google service acceptance.
 
-## Included files
+## Five minute reviewer route
 
-- `src/`: deployable Apps Script and manifest.
-- `submission/Allo_Operations_Template.xlsx`: importable workbook structure, sample task master and instructions. XLSX does not embed or run Apps Script.
-- `submission/SOLUTION_REPORT.docx`: project explanation and evidence boundaries.
-- `submission/DEPLOYMENT.md`: Google account deployment and acceptance steps.
-- `CHECKPOINTS.md` and `REQUIREMENTS.md`: delivery status and requirement mapping.
-- `evidence/`: generated test output and deterministic scenario results.
+1. Read SOLUTION_REPORT.pdf for workflow and tradeoffs.
+2. Read ASSESSMENT.md for requirement coverage and evidence boundaries.
+3. Open demo.html and complete a portal task. Inspect retained proof and the next cycle. Daily work needs no ticket.
+4. Reset, advance to 17:00 and run repeatedly. Add a recovery note and acknowledge one task. Advance four hours and then a day to inspect both escalation paths.
+5. Inspect evidence/DEMO_RESULTS.json and TEST_RESULTS.tap. Run npm run verify to reproduce local observations.
 
-This release can be reviewed and exercised offline immediately. The accompanying live Google Sheet and actual mail receipts were subsequently confirmed by the user; the XLSX and offline simulation alone do not provide those services.
+## Required deliverables
+
+- SOLUTION_REPORT.pdf: formatted explanation and confirmed candidate details.
+- Allo_Operations_Template.xlsx: importable structure without embedded Apps Script.
+- Allo_Operations_AppsScript.gs or src/: install one source form only; src/appsscript.json is required.
+- DEPLOYMENT.md: setup, authorization and rollback.
+- DEMONSTRATION_PROTOCOL.md: exact actions, expected results, observed local results and pending Google checks.
+
+V2_ACCEPTANCE.md covers recovery, backup routing, calendars, fixed recurrence, weekly reporting and browser checks. UPGRADE_RESULTS.json records observed adapter results. The frontend remains a local simulation.
+
+## Supporting material
+
+MANAGER_OPERATING_PLAYBOOK.md explains recovery ownership, assumptions and pilot metrics. HOSTED_ACCEPTANCE.md retains historical user-reported evidence. evidence/ARTIFACT_QA.json records visual review tied to artifact hashes. SHA256SUMS.json verifies packaged files.
+
+Candidate interview preparation and the unsent email are excluded from the archive. Use Restricted sharing with a confirmed evaluator account. Evaluator access is pending.

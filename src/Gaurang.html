@@ -1,0 +1,36 @@
+<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><base target="_top"><style>.gaurang-launch{position:fixed;right:25px;bottom:24px;background:#19383a;color:#fff;border:1px solid #6a9385;border-radius:30px;padding:15px 22px;box-shadow:0 5px 25px #152d3330;z-index:19;font:600 14px 'Segoe UI',sans-serif}.gaurang-chat{position:fixed;right:24px;bottom:85px;width:410px;max-width:calc(100vw - 32px);height:620px;max-height:calc(100dvh - 110px);display:flex;flex-direction:column;background:#fff;border:1px solid #d5dfd8;border-radius:18px;box-shadow:0 16px 60px #18303630;z-index:20;overflow:hidden;color:#20383d;font:14px/1.55 'Segoe UI',sans-serif}.gaurang-chat[hidden]{display:none}.gaurang-head{display:flex;justify-content:space-between;align-items:center;background:#19383a;color:white;padding:17px 20px}.gaurang-head strong{font-size:21px}.gaurang-head p{margin:2px 0 0;font-size:12px;color:#d5e5dc}.gaurang-head button{border:0;background:transparent;color:#fff;font-size:25px;padding:0 5px;cursor:pointer}.gaurang-source{padding:9px 16px;background:#edf3e8;font-size:11px;color:#375c4a}.gaurang-messages{flex:1;min-height:0;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:13px;overscroll-behavior:contain}.gaurang-bubble{background:#f2f5ef;border-radius:12px;padding:13px;white-space:pre-wrap;overflow-wrap:anywhere}.gaurang-bubble.user{background:#19383a;color:#fff;align-self:flex-end;max-width:90%}.gaurang-bubble small{display:block;font-size:11px!important;line-height:1.6;margin-top:9px;color:#526861}.gaurang-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px}.gaurang-suggestions button{border:1px solid #d4ded5;border-radius:20px;padding:6px 9px;font-size:11px;background:white;color:#365e53;cursor:pointer}.gaurang-chat form{padding:10px 16px 15px;border-top:1px solid #e1e7de}.gaurang-chat label{font-size:11px;font-weight:600}.gaurang-compose{display:flex;gap:8px;margin-top:4px}.gaurang-compose textarea{flex:1;min-width:0;font:13px/1.5 'Segoe UI',sans-serif;resize:vertical;border:1px solid #c5d3cc;border-radius:8px;padding:9px;max-height:120px}.gaurang-compose button{background:#19383a;color:white;border:0;border-radius:8px;padding:10px;cursor:pointer}.gaurang-chat button:disabled{opacity:.5;cursor:wait}#gaurang-status{display:block;font-size:11px;color:#6c4a32;min-height:17px;margin-top:5px}.gaurang-chat :focus-visible,.gaurang-launch:focus-visible{outline:3px solid #8baa6e;outline-offset:2px}.gaurang-sidebar{margin:0}.gaurang-sidebar .gaurang-launch,.gaurang-sidebar .gaurang-head button{display:none}.gaurang-sidebar .gaurang-chat{position:static;width:100%;max-width:none;height:100dvh;max-height:none;border:0;border-radius:0;box-shadow:none}@media(max-width:480px){.gaurang-chat{right:12px;bottom:76px;max-width:calc(100vw - 24px)}.gaurang-launch{right:15px;bottom:15px}}
+</style></head><body class="gaurang-sidebar"><button class="gaurang-launch" id="gaurang-launch" onclick="toggleGaurang()" aria-expanded="false" aria-controls="gaurang-chat">✦ Ask Gaurang</button>
+<section class="gaurang-chat" id="gaurang-chat" aria-label="Gaurang operations assistant" hidden>
+  <header class="gaurang-head"><div><strong>✦ Gaurang</strong><p>Your operations assistant</p></div><button onclick="toggleGaurang()" aria-label="Close Gaurang">×</button></header>
+  <div class="gaurang-source" id="gaurang-mode">Demo records · no live Google Sheets connection</div>
+  <div class="gaurang-messages" id="gaurang-messages" role="log" aria-live="polite" aria-relevant="additions"><div class="gaurang-bubble">Hello, I’m Gaurang. Ask about tasks, manager leave coverage or this week’s report. I answer from recorded information and show my sources.<small>Read-only · no external AI service · include names in each question</small></div></div>
+  <div class="gaurang-suggestions"><button onclick="askGaurangChat('Which tasks are overdue?')">Overdue tasks</button><button onclick="askGaurangChat('Who covers manager leave?')">Leave coverage</button><button onclick="askGaurangChat('Show weekly report')">Weekly report</button></div>
+  <form onsubmit="event.preventDefault();askGaurangChat()"><label for="gaurang-question">Ask Gaurang</label><div class="gaurang-compose"><textarea id="gaurang-question" maxlength="1000" rows="2" placeholder="What needs my attention?" required></textarea><button id="gaurang-send" type="submit">Send</button></div><span id="gaurang-status" role="status"></span></form>
+</section>
+<script>let gaurangBusy=false;
+function toggleGaurang(){
+  const panel=document.getElementById('gaurang-chat'),open=panel.hidden;
+  panel.hidden=!open;document.getElementById('gaurang-launch').setAttribute?.('aria-expanded',String(open));
+  if(open)document.getElementById('gaurang-question').focus?.();else document.getElementById('gaurang-launch').focus?.();
+}
+function gaurangMessage(text,user,answer){
+  const log=document.getElementById('gaurang-messages'),bubble=document.createElement('div');
+  bubble.className='gaurang-bubble'+(user?' user':'');bubble.textContent=text;
+  if(answer){const source=document.createElement('small');source.textContent=(answer.mode==='live'?'Google Sheets':'Website demo')+' · as of '+answer.asOf+'\nSources: '+answer.sources.join('; ');bubble.appendChild(source);}
+  log.appendChild(bubble);while(log.children.length>40)log.removeChild(log.firstChild);log.scrollTop=log.scrollHeight;
+}
+function askGaurangChat(preset){
+  if(gaurangBusy)return;
+  const input=document.getElementById('gaurang-question'),question=String(preset||input.value).trim();
+  const status=document.getElementById('gaurang-status'),send=document.getElementById('gaurang-send');
+  if(!question||question.length>1000){status.textContent='Enter a question between 1 and 1,000 characters.';return;}
+  gaurangBusy=true;send.disabled=true;status.textContent='Checking the available records…';gaurangMessage(question,true);input.value='';
+  const done=()=>{gaurangBusy=false;send.disabled=false;input.focus?.();};
+  const success=answer=>{gaurangMessage(answer.answer,false,answer);status.textContent='Answered from records. Ask another question with its task or employee name.';done();};
+  const failure=error=>{status.textContent=String(error.message||'Unable to read records. Try again.');done();};
+  if(typeof google!=='undefined'&&google.script&&google.script.run){google.script.run.withSuccessHandler(success).withFailureHandler(failure).askGaurang(question);}
+  else {try{success(gaurangAnswer(question,{now,settings:settingsState,tasks,cycles,history:recoveryHistory,leaveRequests:JSON.parse(localStorage.getItem('allo-leave-v1')||'[]'),mode:'demo'}));}catch(e){failure(e);}}
+}
+if(typeof google!=='undefined'&&google.script&&google.script.run){document.getElementById('gaurang-mode').textContent='Google Sheets · fresh read on each question';document.getElementById('gaurang-chat').hidden=false;}
+if(typeof document.addEventListener==='function')document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!document.getElementById('gaurang-chat').hidden&&!document.body.classList.contains('gaurang-sidebar')){document.getElementById('gaurang-chat').hidden=true;document.getElementById('gaurang-launch').setAttribute('aria-expanded','false');document.getElementById('gaurang-launch').focus();}});
+</script></body></html>

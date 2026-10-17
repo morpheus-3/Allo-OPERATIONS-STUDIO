@@ -4,6 +4,7 @@ function runHealthCheck() {
   const rows=[],cfg=settings(),tasks=records('Tasks');
   const check=(name,fn)=>{try {rows.push([name,'PASS',String(fn()||'OK')]);}catch(err){rows.push([name,'FAIL',String(err.message||err)]);}};
   check('Settings',()=>validateSettings(cfg));
+  check('Paid leave entitlement',()=>leaveEntitlement(cfg)+' full working days per unique employee email per calendar year');
   check('Task configuration',()=>{
     const ids=new Set();
     tasks.forEach(t=>{validateTask(t);if(ids.has(t.TaskID))throw new Error('Duplicate ID '+t.TaskID);ids.add(t.TaskID);});
@@ -26,11 +27,15 @@ function runHealthCheck() {
   });
   check('Automation heartbeat',()=>{
     const last=PropertiesService.getScriptProperties().getProperty('LAST_SUCCESSFUL_RUN');
-    if(!last || new Date()-new Date(last)>15*60000)throw new Error('No successful automation run within 15 minutes; inspect trigger executions');
+    const timestamp=last ? new Date(last).getTime() : NaN;
+    if(!Number.isFinite(timestamp))throw new Error('Missing or invalid automation heartbeat; inspect trigger executions');
+    const age=new Date().getTime()-timestamp;
+    if(age < -60000)throw new Error('Automation heartbeat is more than one minute in the future; inspect timestamp and clock');
+    if(age>15*60000)throw new Error('No successful automation run within 15 minutes; inspect trigger executions');
     return last;
   });
   check('No duplicate cycles or email keys',()=>{
-    for(const [name,key] of [['Workboard','CycleID'],['EmailLog','Key']]) {
+    for(const [name,key] of [['Workboard','CycleID'],['EmailLog','Key'],['RecoveryLog','EntryID']]) {
       const values=records(name).map(r=>r[key]);if(new Set(values).size!==values.length)throw new Error('Duplicate '+key+' in '+name);
     }
   });
@@ -38,7 +43,7 @@ function runHealthCheck() {
     const s=book().getSheetByName('Workboard');
     if(!s.getProtections(SpreadsheetApp.ProtectionType.SHEET).some(p=>p.getDescription()==='ALLO:system'))throw new Error('Run setup to apply system protection');
     const descriptions=s.getProtections(SpreadsheetApp.ProtectionType.RANGE).map(p=>p.getDescription());
-    records('Workboard').forEach(c=>['H'+c._row+':I'+c._row,'N'+c._row,'Q'+c._row].forEach(a=>{
+    records('Workboard').forEach(c=>['H'+c._row+':I'+c._row,'N'+c._row,'Q'+c._row,'T'+c._row+':Y'+c._row].forEach(a=>{
       if(!descriptions.includes('ALLO:'+c.CycleID+':'+a))throw new Error('Missing protection for '+c.CycleID+' '+a);
     }));
     return 'Protection objects present; verify actual users manually';

@@ -1,6 +1,7 @@
 {
   "name": "allo-ai-operations-manager",
-  "version": "1.1.0",
+  "version": "2.1.0",
+  "releaseDate": "2026-10-17",
   "private": true,
   "description": "Google Sheets recurring operations prototype",
   "scripts": {
@@ -10,7 +11,8 @@
     "start": "node scripts/serve.cjs",
     "demo:report": "node scripts/demo-report.cjs",
     "verify": "node scripts/verify.cjs",
-    "package": "python scripts/package_release.py"
+    "artifacts": "python scripts/package_release.py --prepare",
+    "package": "python scripts/package_release.py --finalize"
   },
   "engines": {
     "node": ">=18"

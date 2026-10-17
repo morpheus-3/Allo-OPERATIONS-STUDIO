@@ -4,7 +4,7 @@ const types={'.html':'text/html; charset=utf-8','.md':'text/plain; charset=utf-8
 const server=http.createServer((req,res)=>{
   let pathname;try{pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);}catch{res.writeHead(400).end('Bad request');return;}
   if(pathname==='/')pathname='/demo.html';
-  const allowed=pathname==='/demo.html'||/^\/(README|CHECKPOINTS|REQUIREMENTS|DEMO)\.md$/.test(pathname)||/^\/(submission|evidence)\/[A-Za-z0-9_.-]+$/.test(pathname);
+  const allowed=['/demo.html','/leave.html'].includes(pathname)||/^\/(README|CHECKPOINTS|REQUIREMENTS|DEMO)\.md$/.test(pathname)||/^\/(submission|evidence)\/[A-Za-z0-9_.-]+$/.test(pathname);
   if(!allowed){res.writeHead(404).end('Not found');return;}
   const file=path.join(root,pathname);
   fs.readFile(file,(err,bytes)=>{if(err){res.writeHead(404).end('Not found');return;}res.writeHead(200,{'Content-Type':types[path.extname(file)]||'application/octet-stream','Cache-Control':'no-store'});res.end(bytes);});

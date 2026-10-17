@@ -1,0 +1,401 @@
+﻿[
+    {
+        "Path":  ".build-deps",
+        "Files":  837,
+        "Bytes":  14267592,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp/pdfs",
+        "Files":  4,
+        "Bytes":  496816,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp/release-check",
+        "Files":  52,
+        "Bytes":  382435,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp/release-check-v2",
+        "Files":  55,
+        "Bytes":  388113,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "private/history",
+        "Files":  6,
+        "Bytes":  287487,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "INSPECTION_REPORT.md",
+        "Files":  1,
+        "Bytes":  10023,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "evidence/INSPECTION_RESOLUTION.md",
+        "Files":  1,
+        "Bytes":  1747,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "submission/Allo_Operations_Template.xlsx.inspect.ndjson",
+        "Files":  1,
+        "Bytes":  61854,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\approve_v2_artifacts.py",
+        "Files":  1,
+        "Bytes":  3330,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\check_package_gate.py",
+        "Files":  1,
+        "Bytes":  800,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\check_release.py",
+        "Files":  1,
+        "Bytes":  1299,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\check_release_v2.py",
+        "Files":  1,
+        "Bytes":  1322,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\finalize_artifact_qa.py",
+        "Files":  1,
+        "Bytes":  2882,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\final_v2_docs.py",
+        "Files":  1,
+        "Bytes":  13369,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\prepare_v2_release.py",
+        "Files":  1,
+        "Bytes":  455,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\sync_v2_bundle.cjs",
+        "Files":  1,
+        "Bytes":  370,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\update_handover.py",
+        "Files":  1,
+        "Bytes":  4329,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\update_v2_docs.py",
+        "Files":  1,
+        "Bytes":  9820,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\approved-interview-1.png",
+        "Files":  1,
+        "Bytes":  384714,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\approved-interview-2.png",
+        "Files":  1,
+        "Bytes":  258715,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\approved-interview-3.png",
+        "Files":  1,
+        "Bytes":  137154,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\approved-solution-1.png",
+        "Files":  1,
+        "Bytes":  330010,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\approved-solution-2.png",
+        "Files":  1,
+        "Bytes":  331790,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\final-interview-1.png",
+        "Files":  1,
+        "Bytes":  384714,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\final-interview-2.png",
+        "Files":  1,
+        "Bytes":  258715,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\final-interview-3.png",
+        "Files":  1,
+        "Bytes":  137154,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\final-solution-1.png",
+        "Files":  1,
+        "Bytes":  365412,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\final-solution-2.png",
+        "Files":  1,
+        "Bytes":  315569,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\final-v2-interview-1.png",
+        "Files":  1,
+        "Bytes":  400071,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\final-v2-interview-2.png",
+        "Files":  1,
+        "Bytes":  276478,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\final-v2-interview-3.png",
+        "Files":  1,
+        "Bytes":  149351,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\final-v2-solution-1.png",
+        "Files":  1,
+        "Bytes":  353082,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\final-v2-solution-2.png",
+        "Files":  1,
+        "Bytes":  367034,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\interview-1.png",
+        "Files":  1,
+        "Bytes":  362728,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\interview-2.png",
+        "Files":  1,
+        "Bytes":  335343,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\interview-3.png",
+        "Files":  1,
+        "Bytes":  88924,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\RecoveryLog-Left.png",
+        "Files":  1,
+        "Bytes":  9225,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\RecoveryLog-Right.png",
+        "Files":  1,
+        "Bytes":  10820,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\reviewed-interview-1.png",
+        "Files":  1,
+        "Bytes":  384714,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\reviewed-interview-2.png",
+        "Files":  1,
+        "Bytes":  258715,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\reviewed-interview-3.png",
+        "Files":  1,
+        "Bytes":  137154,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\reviewed-solution-1.png",
+        "Files":  1,
+        "Bytes":  349093,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\reviewed-solution-2.png",
+        "Files":  1,
+        "Bytes":  312742,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\solution-1.png",
+        "Files":  1,
+        "Bytes":  335568,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\solution-2.png",
+        "Files":  1,
+        "Bytes":  325122,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\solution-3.png",
+        "Files":  1,
+        "Bytes":  32236,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\updated-interview-1.png",
+        "Files":  1,
+        "Bytes":  334652,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\updated-interview-2.png",
+        "Files":  1,
+        "Bytes":  231205,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\updated-interview-3.png",
+        "Files":  1,
+        "Bytes":  122969,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\updated-solution-1.png",
+        "Files":  1,
+        "Bytes":  296714,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\updated-solution-2.png",
+        "Files":  1,
+        "Bytes":  308180,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\v2-interview-1.png",
+        "Files":  1,
+        "Bytes":  400168,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\v2-interview-2.png",
+        "Files":  1,
+        "Bytes":  276570,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\v2-interview-3.png",
+        "Files":  1,
+        "Bytes":  149283,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\v2-solution-1.png",
+        "Files":  1,
+        "Bytes":  353132,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\v2-solution-2.png",
+        "Files":  1,
+        "Bytes":  325749,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    },
+    {
+        "Path":  "tmp\\artifact-build\\qa\\v2-solution-3.png",
+        "Files":  1,
+        "Bytes":  54702,
+        "Action":  "Move to Windows Recycle Bin",
+        "Completed":  true
+    }
+]
