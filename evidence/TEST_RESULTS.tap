@@ -2,379 +2,379 @@ TAP version 13
 # Subtest: Google acceptance fixture has expected boundary populations and refuses unsafe copies
 ok 1 - Google acceptance fixture has expected boundary populations and refuses unsafe copies
   ---
-  duration_ms: 102.2218
+  duration_ms: 104.1069
   type: 'test'
   ...
 # Subtest: reviewer-facing demo distinguishes reported live evidence from outstanding checks
 ok 2 - reviewer-facing demo distinguishes reported live evidence from outstanding checks
   ---
-  duration_ms: 1.8001
+  duration_ms: 2.0373
   type: 'test'
   ...
 # Subtest: confirmed candidate identity is present and contains no template placeholders
 ok 3 - confirmed candidate identity is present and contains no template placeholders
   ---
-  duration_ms: 1.3993
+  duration_ms: 0.8068
   type: 'test'
   ...
 # Subtest: Gaurang uses current records with cycle citations and keeps acknowledgement separate
 ok 4 - Gaurang uses current records with cycle citations and keeps acknowledgement separate
   ---
-  duration_ms: 41.5721
+  duration_ms: 47.963
   type: 'test'
   ...
 # Subtest: Gaurang answers configured coverage and calendar but refuses invented employee leave
 ok 5 - Gaurang answers configured coverage and calendar but refuses invented employee leave
   ---
-  duration_ms: 5.5478
+  duration_ms: 5.4252
   type: 'test'
   ...
 # Subtest: Gaurang weekly denominators and recurrence come from shared rules
 ok 6 - Gaurang weekly denominators and recurrence come from shared rules
   ---
-  duration_ms: 5.1637
+  duration_ms: 4.9871
   type: 'test'
   ...
 # Subtest: Gaurang uses saved recovery versions and never treats record instructions as executable
 ok 7 - Gaurang uses saved recovery versions and never treats record instructions as executable
   ---
-  duration_ms: 7.4338
+  duration_ms: 4.7458
   type: 'test'
   ...
 # Subtest: Google Sheets Gaurang endpoint fails closed for missing and unauthorized identities
 ok 8 - Google Sheets Gaurang endpoint fails closed for missing and unauthorized identities
   ---
-  duration_ms: 44.0828
+  duration_ms: 49.3923
   type: 'test'
   ...
 # Subtest: chat UI renders record text safely, prevents concurrent requests and recovers from failures
 ok 9 - chat UI renders record text safely, prevents concurrent requests and recovers from failures
   ---
-  duration_ms: 2.0169
+  duration_ms: 3.7265
   type: 'test'
   ...
 # Subtest: health rejects missing, malformed, stale and implausibly future heartbeats
 ok 10 - health rejects missing, malformed, stale and implausibly future heartbeats
   ---
-  duration_ms: 85.7959
+  duration_ms: 96.6374
   type: 'test'
   ...
 # Subtest: Sheets API adapter: setup is repeatable and builds all sheet/protection structures
 ok 11 - Sheets API adapter: setup is repeatable and builds all sheet/protection structures
   ---
-  duration_ms: 42.1859
+  duration_ms: 36.364
   type: 'test'
   ...
 # Subtest: employee completes using Sheets API adapter persistence, metadata locks and next cycle inherits protections
 ok 12 - employee completes using Sheets API adapter persistence, metadata locks and next cycle inherits protections
   ---
-  duration_ms: 27.76
+  duration_ms: 29.8385
   type: 'test'
   ...
 # Subtest: protected ranges deny wrong employee, system metadata, unknown rows and wrong manager
 ok 13 - protected ranges deny wrong employee, system metadata, unknown rows and wrong manager
   ---
-  duration_ms: 24.7712
+  duration_ms: 23.1378
   type: 'test'
   ...
 # Subtest: missing ticket resets checkbox without erasing typed evidence or manager note
 ok 14 - missing ticket resets checkbox without erasing typed evidence or manager note
   ---
-  duration_ms: 27.8594
+  duration_ms: 31.7801
   type: 'test'
   ...
 # Subtest: dry-run manager alert, simulated manager edit, completion and review close escalation
 ok 15 - dry-run manager alert, simulated manager edit, completion and review close escalation
   ---
-  duration_ms: 40.1099
+  duration_ms: 35.9487
   type: 'test'
   ...
 # Subtest: installing automation twice keeps one timer and one edit trigger; health reports mode
 ok 16 - installing automation twice keeps one timer and one edit trigger; health reports mode
   ---
-  duration_ms: 29.7726
+  duration_ms: 27.7621
   type: 'test'
   ...
 # Subtest: MailApp adapter simulates sending unique stages and catches up leadership without duplicates
 ok 17 - MailApp adapter simulates sending unique stages and catches up leadership without duplicates
   ---
-  duration_ms: 38.63
+  duration_ms: 37.9667
   type: 'test'
   ...
 # Subtest: one failed delivery does not block other employee alerts
 ok 18 - one failed delivery does not block other employee alerts
   ---
-  duration_ms: 26.3003
+  duration_ms: 25.4636
   type: 'test'
   ...
 # Subtest: proof-only edit never attributes an already queued completion to another action
 ok 19 - proof-only edit never attributes an already queued completion to another action
   ---
-  duration_ms: 24.9347
+  duration_ms: 18.7943
   type: 'test'
   ...
 # Subtest: strict configuration rejects duplicate IDs and unsafe dry-run values before alerts
 ok 20 - strict configuration rejects duplicate IDs and unsafe dry-run values before alerts
   ---
-  duration_ms: 17.2285
+  duration_ms: 16.0262
   type: 'test'
   ...
 # Subtest: empty rows with unchecked checkboxes do not become phantom tasks or cycles
 ok 21 - empty rows with unchecked checkboxes do not become phantom tasks or cycles
   ---
-  duration_ms: 44.9086
+  duration_ms: 37.1383
   type: 'test'
   ...
 # Subtest: partial task rows still fail validation instead of being silently discarded
 ok 22 - partial task rows still fail validation instead of being silently discarded
   ---
-  duration_ms: 16.423
+  duration_ms: 15.2523
   type: 'test'
   ...
 # Subtest: successful delivery recovery clears mail errors but preserves validation errors
 ok 23 - successful delivery recovery clears mail errors but preserves validation errors
   ---
-  duration_ms: 18.9933
+  duration_ms: 19.2537
   type: 'test'
   ...
 # Subtest: new cycles use the next logical row despite far-away FALSE placeholders
 ok 24 - new cycles use the next logical row despite far-away FALSE placeholders
   ---
-  duration_ms: 100.9624
+  duration_ms: 93.4725
   type: 'test'
   ...
 # Subtest: compacting Workboard preserves cycle data and ledger with a protected backup
 ok 25 - compacting Workboard preserves cycle data and ledger with a protected backup
   ---
-  duration_ms: 40.7444
+  duration_ms: 34.4066
   type: 'test'
   ...
 # Subtest: leave website supports employee submission, manager approval and refreshed balances from persisted records
 ok 26 - leave website supports employee submission, manager approval and refreshed balances from persisted records
   ---
-  duration_ms: 45.563
+  duration_ms: 47.1115
   type: 'test'
   ...
 # Subtest: leave counts configured working days, excludes holidays, and rejects year-spanning and empty requests
 ok 27 - leave counts configured working days, excludes holidays, and rejects year-spanning and empty requests
   ---
-  duration_ms: 89.0686
+  duration_ms: 96.9414
   type: 'test'
   ...
 # Subtest: leave requests are own-account only, overlap checked and retries idempotent
 ok 28 - leave requests are own-account only, overlap checked and retries idempotent
   ---
-  duration_ms: 41.4616
+  duration_ms: 36.742
   type: 'test'
   ...
 # Subtest: manager approval reserves annual balance once, history retained, cancellation restores it
 ok 29 - manager approval reserves annual balance once, history retained, cancellation restores it
   ---
-  duration_ms: 40.4862
+  duration_ms: 42.2472
   type: 'test'
   ...
 # Subtest: approval rechecks remaining balance and rejects self-approval; pending does not reserve
 ok 30 - approval rechecks remaining balance and rejects self-approval; pending does not reserve
   ---
-  duration_ms: 45.8346
+  duration_ms: 59.1062
   type: 'test'
   ...
 # Subtest: leave decision ledger protects balance after an interrupted request-row write
 ok 31 - leave decision ledger protects balance after an interrupted request-row write
   ---
-  duration_ms: 29.4401
+  duration_ms: 36.8688
   type: 'test'
   ...
 # Subtest: employees see their own records and a shared email has one entitlement
 ok 32 - employees see their own records and a shared email has one entitlement
   ---
-  duration_ms: 28.4217
+  duration_ms: 22.934
   type: 'test'
   ...
 # Subtest: leave backup approval expires with the cover window and past approved leave cannot be cancelled
 ok 33 - leave backup approval expires with the cover window and past approved leave cannot be cancelled
   ---
-  duration_ms: 32.7697
+  duration_ms: 24.7218
   type: 'test'
   ...
 # Subtest: live leave endpoint queues signed commands and only the owner worker writes protected records
 ok 34 - live leave endpoint queues signed commands and only the owner worker writes protected records
   ---
-  duration_ms: 24.8116
+  duration_ms: 23.2853
   type: 'test'
   ...
 # Subtest: owner queue worker rechecks approval balance when competing requests were queued
 ok 35 - owner queue worker rechecks approval balance when competing requests were queued
   ---
-  duration_ms: 38.1222
+  duration_ms: 41.1194
   type: 'test'
   ...
 # Subtest: recovery stays editable after acknowledgement, versions changes and suppresses unchanged retries
 ok 36 - recovery stays editable after acknowledgement, versions changes and suppresses unchanged retries
   ---
-  duration_ms: 97.3792
+  duration_ms: 109.3537
   type: 'test'
   ...
 # Subtest: resolution note requires actual employee completion and missing recovery inputs reject save
 ok 37 - resolution note requires actual employee completion and missing recovery inputs reject save
   ---
-  duration_ms: 40.9025
+  duration_ms: 31.1787
   type: 'test'
   ...
 # Subtest: leave coverage routes alerts to backup and new alerts return automatically to primary
 ok 38 - leave coverage routes alerts to backup and new alerts return automatically to primary
   ---
-  duration_ms: 45.9062
+  duration_ms: 43.4939
   type: 'test'
   ...
 # Subtest: working calendar skips configured holidays and respects a nonstandard workweek
 ok 39 - working calendar skips configured holidays and respects a nonstandard workweek
   ---
-  duration_ms: 22.1172
+  duration_ms: 22.8568
   type: 'test'
   ...
 # Subtest: fixed recurrence retains anchor, skips elapsed schedule dates and deduplicates rolled dates
 ok 40 - fixed recurrence retains anchor, skips elapsed schedule dates and deduplicates rolled dates
   ---
-  duration_ms: 24.5806
+  duration_ms: 21.816
   type: 'test'
   ...
 # Subtest: weekly denominators include unresolved due cycles and mature review deadlines, with historical carryover
 ok 41 - weekly denominators include unresolved due cycles and mature review deadlines, with historical carryover
   ---
-  duration_ms: 21.2924
+  duration_ms: 26.4126
   type: 'test'
   ...
 # Subtest: setup upgrades old header suffixes without changing history and refuses unknown columns
 ok 42 - setup upgrades old header suffixes without changing history and refuses unknown columns
   ---
-  duration_ms: 30.1823
+  duration_ms: 26.802
   type: 'test'
   ...
 # Subtest: weekly live cutoff includes due, review and recovery events exactly at now
 ok 43 - weekly live cutoff includes due, review and recovery events exactly at now
   ---
-  duration_ms: 21.854
+  duration_ms: 23.1272
   type: 'test'
   ...
 # Subtest: weekly view agrees with workboard at cutoff and shows its selected week
 ok 44 - weekly view agrees with workboard at cutoff and shows its selected week
   ---
-  duration_ms: 107.6813
+  duration_ms: 118.9463
   type: 'test'
   ...
 # Subtest: preview completes and prepares next cycle using the shared engine
 ok 45 - preview completes and prepares next cycle using the shared engine
   ---
-  duration_ms: 26.0166
+  duration_ms: 26.1374
   type: 'test'
   ...
 # Subtest: preview runs manager and leadership flows without repeated alerts
 ok 46 - preview runs manager and leadership flows without repeated alerts
   ---
-  duration_ms: 56.7258
+  duration_ms: 65.6934
   type: 'test'
   ...
 # Subtest: preview tabs, employee filter, input escaping and persistence work
 ok 47 - preview tabs, employee filter, input escaping and persistence work
   ---
-  duration_ms: 79.0071
+  duration_ms: 79.8736
   type: 'test'
   ...
 # Subtest: preview blocks empty tickets and early future completion
 ok 48 - preview blocks empty tickets and early future completion
   ---
-  duration_ms: 18.8459
+  duration_ms: 24.3499
   type: 'test'
   ...
 # Subtest: preview recovery drawer saves versions after review without duplicating unchanged plans
 ok 49 - preview recovery drawer saves versions after review without duplicating unchanged plans
   ---
-  duration_ms: 47.7265
+  duration_ms: 49.2583
   type: 'test'
   ...
 # Subtest: frontend scenarios, weekly reporting, policy changes and holiday controls use shared rules
 ok 50 - frontend scenarios, weekly reporting, policy changes and holiday controls use shared rules
   ---
-  duration_ms: 140.0286
+  duration_ms: 140.5784
   type: 'test'
   ...
 # Subtest: template and generated frontend expose unique IDs and local-simulation boundaries
 ok 51 - template and generated frontend expose unique IDs and local-simulation boundaries
   ---
-  duration_ms: 27.6083
+  duration_ms: 27.7145
   type: 'test'
   ...
 # Subtest: standalone build preserves source replacement tokens and CSV neutralizes spreadsheet formulas
 ok 52 - standalone build preserves source replacement tokens and CSV neutralizes spreadsheet formulas
   ---
-  duration_ms: 53.8701
+  duration_ms: 51.0407
   type: 'test'
   ...
 # Subtest: 1: 7/15/30 day completion creates one next cycle, completion anchored
 ok 53 - 1: 7/15/30 day completion creates one next cycle, completion anchored
   ---
-  duration_ms: 45.1199
+  duration_ms: 53.9047
   type: 'test'
   ...
 # Subtest: 2: single-point ticket completion records actual editor, timestamp, next cycle
 ok 54 - 2: single-point ticket completion records actual editor, timestamp, next cycle
   ---
-  duration_ms: 5.8338
+  duration_ms: 5.1981
   type: 'test'
   ...
 # Subtest: 3: daily attestation needs no ticket; Friday rolls to Monday
 ok 55 - 3: daily attestation needs no ticket; Friday rolls to Monday
   ---
-  duration_ms: 6.6644
+  duration_ms: 5.2804
   type: 'test'
   ...
 # Subtest: 4: manager alerted at same-day cutoff, not before
 ok 56 - 4: manager alerted at same-day cutoff, not before
   ---
-  duration_ms: 5.1353
+  duration_ms: 3.0148
   type: 'test'
   ...
 # Subtest: 5: manager acknowledgment requires manager identity and action note
 ok 57 - 5: manager acknowledgment requires manager identity and action note
   ---
-  duration_ms: 5.2559
+  duration_ms: 2.9657
   type: 'test'
   ...
 # Subtest: 6/7: escalate missing acknowledgment at 4h, unresolved acknowledged work at 24h
 ok 58 - 6/7: escalate missing acknowledgment at 4h, unresolved acknowledged work at 24h
   ---
-  duration_ms: 3.822
+  duration_ms: 2.4082
   type: 'test'
   ...
 # Subtest: 8: repeated jobs do not duplicate cycles or manager/leadership alerts
 ok 59 - 8: repeated jobs do not duplicate cycles or manager/leadership alerts
   ---
-  duration_ms: 6.2771
+  duration_ms: 5.2687
   type: 'test'
   ...
 # Subtest: reject missing ticket, missing identity, wrong employee, early completion
 ok 60 - reject missing ticket, missing identity, wrong employee, early completion
   ---
-  duration_ms: 17.3042
+  duration_ms: 9.8455
   type: 'test'
   ...
 # Subtest: completed task still escalates if required manager review is missing
 ok 61 - completed task still escalates if required manager review is missing
   ---
-  duration_ms: 4.6458
+  duration_ms: 2.679
   type: 'test'
   ...
 # Subtest: send failure is held for review and not retried automatically
 ok 62 - send failure is held for review and not retried automatically
   ---
-  duration_ms: 5.8344
+  duration_ms: 3.343
   type: 'test'
   ...
 # Subtest: successful live delivery logs once and refuses placeholder recipients
 ok 63 - successful live delivery logs once and refuses placeholder recipients
   ---
-  duration_ms: 5.1817
+  duration_ms: 2.5327
   type: 'test'
   ...
 1..63
@@ -385,4 +385,4 @@ ok 63 - successful live delivery logs once and refuses placeholder recipients
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 803.3211
+# duration_ms 785.3499
